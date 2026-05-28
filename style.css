@@ -72,7 +72,7 @@ background: var(--bg-surface); color: var(--text-main); outline: none; transitio
 
 /* Grid Layouts */
 .search-filter-bar { padding: 1.5rem 5%; display: flex; gap: 1rem; flex-wrap: wrap; }
-.products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; padding: 2rem 5%; }
+.products-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 2rem; padding: 2rem 5%; }
 .product-card { 
 background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 16px; overflow: hidden;
 box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: transform 0.25s ease, box-shadow 0.25s ease; display: flex; flex-direction: column; position: relative;
@@ -147,3 +147,4 @@ z-index: 9999; transform: translateY(-150%); transition: transform 0.4s cubic-be
 .footer-col ul li a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
 .footer-col ul li a:hover { color: var(--accent); }
 .footer-bottom { border-top: 1px solid var(--border-color); padding-top: 2rem; text-align: center; color: var(--text-muted); font-size: 0.85rem; }
+}
