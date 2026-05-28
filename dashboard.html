@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Core Control Mainframe | Mwamini</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --dash-blue-deep: #1e3a8a;
+            --dash-blue-accent: #2563eb;
+            --dash-blue-light: #eff6ff;
+            --dash-bg-card: #ffffff;
+            --dash-border: #e2e8f0;
+            --dash-text: #0f172a;
+            --dash-muted: #64748b;
+            --dash-red: #ef4444;
+            --dash-green: #10b981;
+        }
+
+        [data-theme="dark"] {
+            --dash-blue-deep: #0f172a;
+            --dash-blue-accent: #3b82f6;
+            --dash-blue-light: #1e293b;
+            --dash-bg-card: #1e293b;
+            --dash-border: #334155;
+            --dash-text: #f8fafc;
+            --dash-muted: #94a3b8;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--dash-text);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dashboard-container {
+            display: flex;
+            flex: 1;
+            min-height: calc(100vh - 70px);
+            position: relative;
+        }
+
+        /* Sidebar Navigation styling */
+        .dash-sidebar {
+            width: 280px;
+            background: var(--dash-bg-card);
+            border-right: 1px solid var(--dash-border);
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 10;
+        }
+
+        .dash-nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            padding: 1rem 1.25rem;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 12px;
+            color: var(--dash-text);
+            font-weight: 600;
+            font-size: 14px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .dash-nav-btn:hover {
+            background: var(--dash-blue-light);
+            color: var(--dash-blue-accent);
+        }
+
+        .dash-nav-btn.active {
+            background: var(--dash-blue-deep) !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.15);
+        }
+
+        /* Main Area Layout */
+        .dash-main-content {
+            flex: 1;
+            padding: 2.5rem;
+            overflow-y: auto;
+            position: relative;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, rgba(248,250,252,0.5) 100%);
+        }
+
+        .dash-panel {
+            display: none;
+            animation: dashFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .dash-panel.active-panel {
+            display: block;
+        }
+
+        @keyframes dashFadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Luxury Metric Cards */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .metric-card {
+            background: var(--dash-bg-card);
+            border: 1px solid var(--dash-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--dash-blue-accent);
+        }
+
+        /* Garden Integration Frame */
+        .garden-container-card {
+            background: var(--dash-bg-card);
+            border: 1px solid var(--dash-border);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.02);
+            position: relative;
+        }
+
+        #garden-canvas {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(180deg, #f0f7ff 0%, #e0f2fe 100%);
+            display: block;
+            transition: filter 0.5s ease;
+        }
+
+        [data-theme="dark"] #garden-canvas {
+            background: linear-gradient(180deg, #0f172a 0%, #1e1b4b 100%);
+            filter: brightness(0.8) contrast(1.1);
+        }
+
+        .garden-controls-overlay {
+            padding: 1rem 1.5rem;
+            background: var(--dash-bg-card);
+            border-top: 1px solid var(--dash-border);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Pipeline Order Tracking Visualizer */
+        .pipeline-tracker {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin: 2.5rem 0;
+            padding: 0 1rem;
+        }
+
+        .pipeline-tracker::before {
+            content: '';
+            position: absolute;
+            top: 15px; left: 0; width: 100%; height: 4px;
+            background: var(--dash-border);
+            z-index: 1;
+        }
+
+        .pipeline-progress-line {
+            position: absolute;
+            top: 15px; left: 0; height: 4px;
+            background: var(--dash-blue-accent);
+            z-index: 2;
+            width: 0%;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .pipeline-step {
+            position: relative;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            flex: 1;
+        }
+
+        .pipeline-node {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--dash-bg-card);
+            border: 3px solid var(--dash-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+            color: var(--dash-muted);
+            transition: all 0.4s ease;
+        }
+
+        .pipeline-step.completed .pipeline-node {
+            background: var(--dash-blue-accent);
+            border-color: var(--dash-blue-accent);
+            color: #ffffff;
+        }
+
+        .pipeline-step.active .pipeline-node {
+            background: #ffffff;
+            border-color: var(--dash-blue-deep);
+            color: var(--dash-blue-deep);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.25);
+        }
+
+        .pipeline-label {
+            margin-top: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--dash-text);
+        }
+
+        /* Music Floating Dock */
+        .music-dock {
+            background: var(--dash-bg-card);
+            border: 1px solid var(--dash-border);
+            border-radius: 12px;
+            padding: 0.75rem 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        /* Live Feedback Feed Cards */
+        .comment-stream {
+            max-height: 320px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-right: 0.5rem;
+        }
+
+        .comment-node {
+            background: var(--dash-blue-light);
+            border-radius: 12px;
+            padding: 1rem;
+            border: 1px solid var(--dash-border);
+            position: relative;
+        }
+
+        .reaction-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .react-pill {
+            background: var(--dash-bg-card);
+            border: 1px solid var(--dash-border);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .react-pill:hover {
+            border-color: var(--dash-blue-accent);
+            background: var(--dash-blue-light);
+        }
+
+        /* Grid Configuration */
+        .dashboard-split-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 2rem;
+        }
+
+        .form-grid-two-col {
+            display: grid;
+            grid-template-columns: 1xl 1xl;
+            gap: 1rem;
+        }
+
+        .settings-card {
+            background: var(--dash-bg-card);
+            border: 1px solid var(--dash-border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .toggle-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--dash-border);
+        }
+
+        /* Utility Switch button */
+        .switch-toggle {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .switch-toggle input { opacity: 0; width: 0; height: 0; }
+
+        .slider-round {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: var(--dash-border);
+            transition: .3s; border-radius: 24px;
+        }
+
+        .slider-round:before {
+            position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px;
+            background-color: white; transition: .3s; border-radius: 50%;
+        }
+
+        input:checked + .slider-round { background-color: var(--dash-blue-accent); }
+        input:checked + .slider-round:before { transform: translateX(20px); }
+
+        @media (max-width: 992px) {
+            .dashboard-container { flex-direction: column; }
+            .dash-sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--dash-border); flex-direction: row; overflow-x: auto; }
+            .dash-nav-btn { width: auto; white-space: nowrap; }
+            .dashboard-split-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header style="background: var(--glass-bg); backdrop-filter: blur(16px);">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="https://sdxtdkroyolagmjaipgw.supabase.co/storage/v1/object/public/product-assets/Company%20logo.jpg" alt="Mwamini Logo" style="height: 40px; border-radius: 4px; filter: invert(1);">
+            <div class="brand-title">MWAMINI TELEMETRY</div>
+        </div>
+        <div style="display: flex; gap: 1.5rem; align-items: center;">
+            <div class="live-users-badge">
+                <div class="live-users-pulse"></div>
+                <span>Session Active</span>
+            </div>
+            <button id="theme-toggle" class="btn" style="padding:0.5rem 1rem; background: var(--border-color); color: var(--text-main);">Theme</button>
+            <button onclick="logoutMainframe()" class="btn" style="background: var(--danger); color: white; padding: 0.5rem 1rem;">Terminate Session</button>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <aside class="dash-sidebar">
+            <button class="dash-nav-btn active" onclick="switchPanel('analytics')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+                Core Analytics Ecosystem
+            </button>
+            <button class="dash-nav-btn" onclick="switchPanel('orders')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                Order Management Log
+            </button>
+            <button class="dash-nav-btn" onclick="switchPanel('social')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                Social Activity Node
+            </button>
+            <button class="dash-nav-btn" onclick="switchPanel('settings')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                Account Parameter matrix
+            </button>
+        </aside>
+
+        <main class="dash-main-content">
+            
+            <div class="garden-container-card">
+                <canvas id="garden-canvas"></canvas>
+                <div class="garden-controls-overlay">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span style="font-weight: 700; font-size: 13px;">Ambient Biosphere Engine</span>
+                        <button class="btn" style="padding: 4px 10px; font-size: 11px; background: var(--dash-blue-light); color: var(--dash-blue-accent);" onclick="toggleGardenMotion()">Pause Vector Field</button>
+                        <button class="btn" style="padding: 4px 10px; font-size: 11px; background: var(--dash-blue-light); color: var(--dash-blue-accent);" onclick="randomizeGardenGrowth()">Trigger Cross-Pollination</button>
+                    </div>
+                    
+                    <div class="music-dock">
+                        <span style="font-size: 11px; font-weight: 700; color: var(--dash-muted);">Soundscape Synth:</span>
+                        <button onclick="toggleAmbientSynthesizer()" id="synth-toggle-btn" class="btn" style="padding: 4px 12px; font-size: 11px; background: var(--dash-blue-deep); color: white;">Play Frequency</button>
+                        <button onclick="triggerGardenDancePulse()" class="btn" style="padding: 4px 10px; font-size: 11px; background: var(--success); color: white;">Pulse Biosphere</button>
+                    </div>
+                </div>
+            </div>
+
+            <section id="panel-analytics" class="dash-panel active-panel">
+                <div style="margin-bottom: 2rem;">
+                    <h2 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 0.25rem;">Telemetry Control Node</h2>
+                    <p style="color: var(--dash-muted); font-size: 14px;">Welcome back, <span id="user-welcome-name" style="font-weight:700; color:var(--dash-blue-accent);">Operator</span>. System operational metrics are balanced.</p>
+                </div>
+
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div style="font-size: 12px; font-weight: 700; color: var(--dash-muted); text-transform: uppercase;">Active Freight Contracts</div>
+                        <div style="font-size: 2.2rem; font-weight: 800; margin: 0.5rem 0;" id="metric-orders-count">0</div>
+                        <div style="font-size: 12px; color: var(--dash-green); font-weight: 600;">↑ 100% Secure routing dispatch</div>
+                    </div>
+                    <div class="metric-card">
+                        <div style="font-size: 12px; font-weight: 700; color: var(--dash-muted); text-transform: uppercase;">Platform Security clearance</div>
+                        <div style="font-size: 2.2rem; font-weight: 800; margin: 0.5rem 0; color: var(--dash-blue-deep);">Level 1</div>
+                        <div style="font-size: 12px; color: var(--dash-blue-accent); font-weight: 600;">AES-256 Bit Token Verified</div>
+                    </div>
+                    <div class="metric-card">
+                        <div style="font-size: 12px; font-weight: 700; color: var(--dash-muted); text-transform: uppercase;">Connected Hub Node</div>
+                        <div style="font-size: 1.4rem; font-weight: 700; margin: 0.8rem 0; overflow: hidden; text-overflow: ellipsis;" id="metric-hub-name">Unassigned</div>
+                        <div style="font-size: 12px; color: var(--dash-muted);" id="metric-user-phone">Retrieving data signal...</div>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <h3 style="margin-bottom: 1rem;">Primary Pipeline Dispatch Realtime Tracking</h3>
+                    <div id="active-pipeline-placeholder" style="color: var(--dash-muted); font-size: 14px; text-align: center; padding: 2rem 0;">
+                        Select an order from the tracking directory matrix to visualize telemetry trajectory.
+                    </div>
+                    <div id="active-pipeline-display" style="display: none;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <div><strong>Tracking ID:</strong> <span id="pipeline-order-id" style="font-family: monospace;"></span></div>
+                            <div><span id="pipeline-product-title" class="badge" style="background: var(--dash-blue-light); color: var(--dash-blue-accent); font-size: 12px; padding: 6px 12px;"></span></div>
+                        </div>
+                        
+                        <div class="pipeline-tracker">
+                            <div class="pipeline-progress-line" id="pipeline-indicator-line"></div>
+                            <div class="pipeline-step" id="step-Pending">
+                                <div class="pipeline-node">1</div>
+                                <div class="pipeline-label">Pending</div>
+                            </div>
+                            <div class="pipeline-step" id="step-Processing">
+                                <div class="pipeline-node">2</div>
+                                <div class="pipeline-label">Processing</div>
+                            </div>
+                            <div class="pipeline-step" id="step-Delivered">
+                                <div class="pipeline-node">3</div>
+                                <div class="pipeline-label">Delivered</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="panel-orders" class="dash-panel">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+                    <div>
+                        <h2 style="font-size: 1.6rem; font-weight: 800;">Freight Order Allocation Directory</h2>
+                        <p style="color: var(--dash-muted); font-size: 14px;">Audit and filter real-time container consignments.</p>
+                    </div>
+                    <div style="display: flex; gap: 0.75rem;">
+                        <input type="text" id="order-search-input" class="search-input" style="padding: 0.5rem 1rem; font-size: 13px;" placeholder="Search allocation name..." oninput="filterOrdersLog()">
+                        <select id="order-status-filter" class="filter-select" style="padding: 0.5rem 1rem; font-size: 13px;" onchange="filterOrdersLog()">
+                            <option value="All">All Pipelines</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Processing">Processing</option>
+                            <option value="Delivered">Delivered</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="background: var(--dash-bg-card); border-radius: 16px; border: 1px solid var(--dash-border); overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);">
+                    <table class="dashboard-table" style="box-shadow: none; border-radius: 0;">
+                        <thead>
+                            <tr>
+                                <th>Allocation Reference Token</th>
+                                <th>Commodity payload</th>
+                                <th>Metrics</th>
+                                <th>Hub Destination</th>
+                                <th>Telemetry Pipeline Status</th>
+                                <th>Action Terminal</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dashboard-orders-table-body">
+                            <tr><td colspan="6" style="text-align: center; color: var(--dash-muted); padding: 3rem;">Synchronizing with core data signal payload...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="panel-social" class="dash-panel">
+                <div style="margin-bottom: 2rem;">
+                    <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 0.25rem;">Inter-Enterprise Chat Node</h2>
+                    <p style="color: var(--dash-muted); font-size: 14px;">Review updates and react to logs within the secured ecosystem group framework.</p>
+                </div>
+
+                <div class="dashboard-split-grid">
+                    <div class="settings-card">
+                        <h3 style="margin-bottom: 1.5rem;">Transmission Stream</h3>
+                        <div class="comment-stream" id="dashboard-comments-container">
+                            </div>
+                    </div>
+
+                    <div class="settings-card">
+                        <h3 style="margin-bottom: 1rem;">Transmit New Dispatch Payload</h3>
+                        <form id="dash-comment-submit-form" onsubmit="submitDashComment(event)">
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 0.5rem;">Corporate Signature Alias</label>
+                                <input type="text" id="dash-comment-author" class="search-input" style="width: 100%; font-size: 14px;" required placeholder="e.g. Lead Logistics Officer">
+                            </div>
+                            <div style="margin-bottom: 1.5rem;">
+                                <label style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 0.5rem;">Verbatim Payload</label>
+                                <textarea id="dash-comment-body" class="search-input" style="width: 100%; height: 110px; font-size: 14px; resize: none;" required placeholder="Type system-wide message broadcast payload..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.85rem;">Inject Payload into Data Field</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <section id="panel-settings" class="dash-panel">
+                <div style="margin-bottom: 2rem;">
+                    <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 0.25rem;">Account Parameter Configuration Matrix</h2>
+                    <p style="color: var(--dash-muted); font-size: 14px;">Modify identities, authorization structures, and system communication triggers.</p>
+                </div>
+
+                <div class="dashboard-split-grid">
+                    <div>
+                        <div class="settings-card">
+                            <h3 style="margin-bottom: 1.5rem; color: var(--dash-blue-deep);">Profile Identity Settings</h3>
+                            <form id="dash-profile-settings-form" onsubmit="saveProfileMatrix(event)">
+                                <div style="text-align: center; margin-bottom: 1.5rem;">
+                                    <img id="dash-settings-avatar-preview" class="user-avatar-preview" src="https://via.placeholder.com/80" alt="Avatar">
+                                    <div style="font-size: 12px; color: var(--dash-muted); margin-top: 4px;">Dynamic verification identity photo</div>
+                                </div>
+                                <div class="form-grid-two-col">
+                                    <div style="margin-bottom: 1rem;">
+                                        <label style="display: block; font-size: 12px; font-weight: 700; margin-bottom: 0.25rem;">Full Legal Name</label>
+                                        <input type="text" id="set-full-name" class="search-input" style="width: 100%;" required>
+                                    </div>
+                                    <div style="margin-bottom: 1rem;">
+                                        <label style="display: block; font-size: 12px; font-weight: 700; margin-bottom: 0.25rem;">Secure Phone Line</label>
+                                        <input type="text" id="set-phone-number" class="search-input" style="width: 100%;" required>
+                                    </div>
+                                </div>
+                                <div class="form-grid-two-col">
+                                    <div style="margin-bottom: 1rem;">
+                                        <label style="display: block; font-size: 12px; font-weight: 700; margin-bottom: 0.25rem;">Operational Location Base</label>
+                                        <input type="text" id="set-location" class="search-input" style="width: 100%;">
+                                    </div>
+                                    <div style="margin-bottom: 1rem;">
+                                        <label style="display: block; font-size: 12px; font-weight: 700; margin-bottom: 0.25rem;">Destination Freight Hub</label>
+                                        <input type="text" id="set-dest-hub" class="search-input" style="width: 100%;">
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; padding: 0.75rem;">Commit Identity Modifications</button>
+                            </form>
+                        </div>
+
+                        <div class="settings-card">
+                            <h3 style="margin-bottom: 1.5rem; color: var(--dash-blue-deep);">Cryptographic Access Terminal</h3>
+                            <div style="margin-bottom: 1.25rem;">
+                                <label style="display: block; font-size: 12px; font-weight: 700; margin-bottom: 0.25rem;">Rotate Passphrase Key Token</label>
+                                <input type="password" id="set-new-password" class="search-input" style="width: 100%;" placeholder="Enter updated alpha-numeric hash key">
+                            </div>
+                            <button type="button" onclick="rotateSecurityToken()" class="btn" style="width: 100%; background: var(--dash-blue-light); color: var(--dash-blue-accent); font-weight: 700;">Re-Authorize Security Key</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="settings-card">
+                            <h3 style="margin-bottom: 1rem; color: var(--dash-blue-deep);">Notification Trigger Preferences</h3>
+                            <p style="color: var(--dash-muted); font-size: 13px; margin-bottom: 1rem;">Configure pipeline alert automation dispatches.</p>
+                            
+                            <div class="toggle-row">
+                                <div>
+                                    <div style="font-weight:600; font-size:14px;">Instant SMS Telemetry Triggers</div>
+                                    <div style="font-size:12px; color:var(--dash-muted);">Transmit raw status logs directly to cellular terminal</div>
+                                </div>
+                                <label class="switch-toggle">
+                                    <input type="checkbox" checked id="pref-sms-toggle">
+                                    <span class="slider-round"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-row">
+                                <div>
+                                    <div style="font-weight:600; font-size:14px;">Encrypted Email Manifesto Dispatches</div>
+                                    <div style="font-size:12px; color:var(--dash-muted);">Receive complete container manifestos on stage transition</div>
+                                </div>
+                                <label class="switch-toggle">
+                                    <input type="checkbox" checked id="pref-email-toggle">
+                                    <span class="slider-round"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-row">
+                                <div>
+                                    <div style="font-weight:600; font-size:14px;">Real-Time Server Pipeline Telemetry Signals</div>
+                                    <div style="font-size:12px; color:var(--dash-muted);">Stream persistent connection packets for tracking animations</div>
+                                </div>
+                                <label class="switch-toggle">
+                                    <input type="checkbox" checked id="pref-realtime-toggle">
+                                    <span class="slider-round"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="settings-card">
+                            <h3 style="margin-bottom: 1rem; color: var(--dash-blue-deep);">Connected Enterprise Pipeline Tools</h3>
+                            <div class="toggle-row">
+                                <div>
+                                    <div style="font-weight:600; font-size:14px;">Supabase Global Data Grid Replication</div>
+                                    <div style="font-size:12px; color:var(--dash-green); font-weight:700;">LINKED & SYNCHRONIZED</div>
+                                </div>
+                                <div style="width: 10px; height: 10px; border-radius: 50%; background: var(--dash-green);"></div>
+                            </div>
+                            <div class="toggle-row">
+                                <div>
+                                    <div style="font-weight:600; font-size:14px;">ISO-9001 Transit Manifest Verification Grid</div>
+                                    <div style="font-size:12px; color:var(--dash-blue-accent); font-weight:700;">OPERATIONAL STANDBY</div>
+                                </div>
+                                <div style="width: 10px; height: 10px; border-radius: 50%; background: var(--dash-blue-accent);"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <div id="dash-toast-system" class="toast-notification">Payload operational alert event registered.</div>
+
+    <script>
+        // System variables & cache mappings
+        let currentSessionUser = null;
+        let globalOrdersCache = [];
+        let globalCommentsMock = [
+            { id: 1, author: "System Terminal Alpha", body: "Ecosystem synchronized. Ready for secure freight manifest operations.", reactions: { "👍": 4, "🚀": 2 } },
+            { id: 2, author: "Kigali Logistics Hub", body: "Container batch #94-G grains transit pipeline verified at port boundary.", reactions: { "❤️": 5, "🎉": 3 } }
+        ];
+
+        // Canvas animation settings variables
+        let canvas, ctx;
+        let animateGarden = true;
+        let gardenPulseFactor = 1.0;
+        let flowers = [];
+        let grassBlades = [];
+        let butterflies = [];
+        let ambientParticles = [];
+        let cloudOffset = 0;
+
+        // Audio System State Mappings (Web Audio API Synthesizer)
+        let audioCtx = null;
+        let soundIsPlaying = false;
+        let ambientOscillator = null;
+        let ambientGainNode = null;
+        let oscillatorIntervalId = null;
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            initializeThemeRouting();
+            setupInteractiveGardenCanvas();
+            renderSocialCommentStream();
+            
+            // Connect to live Supabase client instance exposed via global configuration scope
+            if (window.supabase) {
+                await synchronizeUserSessionState();
+            } else {
+                showDashToast("Warning: Core database system instance signal detached.", true);
+            }
+        });
+
+        function initializeThemeRouting() {
+            const root = document.documentElement;
+            const themeBtn = document.getElementById('theme-toggle');
+            if(themeBtn) {
+                themeBtn.addEventListener('click', () => {
+                    const nextTheme = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                    root.setAttribute('data-theme', nextTheme);
+                });
+            }
+        }
+
+        async function synchronizeUserSessionState() {
+            try {
+                const { data: { session }, error } = await window.supabase.auth.getSession();
+                if (error || !session) {
+                    showDashToast("Authentication session invalid. Re-routing to verification gateway...", true);
+                    setTimeout(() => window.location.replace("login.html"), 2000);
+                    return;
+                }
+                currentSessionUser = session.user;
+                
+                // Query core Profile configuration schema matrix
+                const { data: profile, error: profErr } = await window.supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', currentSessionUser.id)
+                    .single();
+
+                if (profile) {
+                    document.getElementById('user-welcome-name').innerText = profile.full_name || currentSessionUser.email;
+                    document.getElementById('metric-hub-name').innerText = profile.destination_hub || "Global Route Node";
+                    document.getElementById('metric-user-phone').innerText = profile.phone_number || "No direct cellular signal Link";
+                    
+                    // Bind elements inside profile setup block
+                    document.getElementById('set-full-name').value = profile.full_name || '';
+                    document.getElementById('set-phone-number').value = profile.phone_number || '';
+                    document.getElementById('set-location').value = profile.location || '';
+                    document.getElementById('set-dest-hub').value = profile.destination_hub || '';
+                    if (profile.avatar_url) {
+                        document.getElementById('dash-settings-avatar-preview').src = profile.avatar_url;
+                    }
+                } else {
+                    document.getElementById('user-welcome-name').innerText = currentSessionUser.email;
+                }
+
+                await pullFreightOrdersPayload();
+                initializeRealtimeTelemetrySync();
+
+            } catch (err) {
+                console.error("Critical tracking session fault:", err);
+            }
+        }
+
+        async function pullFreightOrdersPayload() {
+            if(!window.supabase || !currentSessionUser) return;
+            
+            // Attempt extraction based on phone mapping configuration matches matching index.html logic
+            let searchPhone = document.getElementById('set-phone-number')?.value || '';
+            
+            let query = window.supabase.from('orders').select('*');
+            if(searchPhone) {
+                query = query.or(`phone_number.eq.${searchPhone},customer_phone.eq.${searchPhone}`);
+            } else if(currentSessionUser.email) {
+                query = query.eq('email', currentSessionUser.email);
+            }
+            
+            const { data, error } = await query.order('created_at', { ascending: false });
+            
+            if (!error && data) {
+                globalOrdersCache = data;
+                document.getElementById('metric-orders-count').innerText = data.length;
+                renderOrdersTableGrid(data);
+                
+                // Select first primary active log automatically for analytics pipeline component rendering
+                if(data.length > 0) {
+                    activatePipelineVisualizer(data[0]);
+                }
+            }
+        }
+
+        function renderOrdersTableGrid(ordersList) {
+            const tbody = document.getElementById('dashboard-orders-table-body');
+            if(!tbody) return;
+            
+            if(ordersList.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--dash-muted); padding: 3rem;">No active freight records mapped to this data signal network.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = '';
+            ordersList.forEach(order => {
+                const tr = document.createElement('tr');
+                let statusColor = "var(--dash-blue-accent)";
+                if (order.status === 'Delivered') statusColor = "var(--dash-green)";
+                if (order.status === 'Pending') statusColor = "var(--dash-muted)";
+
+                tr.innerHTML = `
+                    <td style="font-family: monospace; font-weight:700;">${order.id.substring(0,8)}...</td>
+                    <td><strong>${order.product_title || 'Commodity Material Pack'}</strong></td>
+                    <td>Qty: ${order.quantity || 1}</td>
+                    <td><small>${order.location || 'Central Depot Hub'}</small></td>
+                    <td><span class="badge" style="background: var(--dash-blue-light); color: ${statusColor};">${order.status || 'Pending'}</span></td>
+                    <td><button class="btn" style="padding:4px 12px; font-size:11px; background: var(--dash-blue-deep); color:white;" onclick="selectOrderToVisualize('${order.id}')">Map Telemetry</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function selectOrderToVisualize(orderId) {
+            const match = globalOrdersCache.find(o => o.id === orderId);
+            if(match) {
+                activatePipelineVisualizer(match);
+                switchPanel('analytics');
+                showDashToast(`Visualizing layout pipeline map tracking for token: ${orderId.substring(0,8)}`);
+            }
+        }
+
+        function activatePipelineVisualizer(order) {
+            document.getElementById('active-pipeline-placeholder').style.display = 'none';
+            document.getElementById('active-pipeline-display').style.display = 'block';
+            document.getElementById('pipeline-order-id').innerText = order.id;
+            document.getElementById('pipeline-product-title').innerText = order.product_title || 'Material Cargo';
+
+            // Reset step class allocations
+            ['Pending', 'Processing', 'Delivered'].forEach(st => {
+                document.getElementById(`step-${st}`).classList.remove('completed', 'active');
+            });
+
+            // Map and color appropriate steps along pipeline
+            if (order.status === 'Pending') {
+                document.getElementById('step-Pending').classList.add('active');
+                document.getElementById('pipeline-indicator-line').style.width = '0%';
+            } else if (order.status === 'Processing') {
+                document.getElementById('step-Pending').classList.add('completed');
+                document.getElementById('step-Processing').classList.add('active');
+                document.getElementById('pipeline-indicator-line').style.width = '50%';
+            } else if (order.status === 'Delivered') {
+                document.getElementById('step-Pending').classList.add('completed');
+                document.getElementById('step-Processing').classList.add('completed');
+                document.getElementById('step-Delivered').classList.add('completed');
+                document.getElementById('pipeline-indicator-line').style.width = '100%';
+            } else {
+                // Fallback tracking mapping defaults
+                document.getElementById('step-Pending').classList.add('active');
+                document.getElementById('pipeline-indicator-line').style.width = '0%';
+            }
+        }
+
+        function filterOrdersLog() {
+            const sVal = document.getElementById('order-search-input').value.toLowerCase();
+            const statusFilter = document.getElementById('order-status-filter').value;
+            
+            const filtered = globalOrdersCache.filter(o => {
+                const matchesSearch = (o.product_title || '').toLowerCase().includes(sVal) || o.id.toLowerCase().includes(sVal);
+                const matchesStatus = statusFilter === 'All' || o.status === statusFilter;
+                return matchesSearch && matchesStatus;
+            });
+            renderOrdersTableGrid(filtered);
+        }
+
+        function switchPanel(panelId) {
+            document.querySelectorAll('.dash-panel').forEach(p => p.classList.remove('active-panel'));
+            document.querySelectorAll('.dash-nav-btn').forEach(b => b.classList.remove('active'));
+            
+            document.getElementById(`panel-${panelId}`).classList.add('active-panel');
+            event.currentTarget.classList.add('active');
+        }
+
+        // --- ACCOUNT SETTINGS SUBMISSION ENGINE ---
+        async function saveProfileMatrix(e) {
+            e.preventDefault();
+            if(!window.supabase || !currentSessionUser) return;
+
+            const updatedPayload = {
+                full_name: document.getElementById('set-full-name').value.trim(),
+                phone_number: document.getElementById('set-phone-number').value.trim(),
+                location: document.getElementById('set-location').value.trim(),
+                destination_hub: document.getElementById('set-dest-hub').value.trim(),
+                updated_at: new Date()
+            };
+
+            const { error } = await window.supabase
+                .from('profiles')
+                .update(updatedPayload)
+                .eq('id', currentSessionUser.id);
+
+            if(!error) {
+                showDashToast("Identity variables successfully written into secure schema cloud ledger.");
+                document.getElementById('user-welcome-name').innerText = updatedPayload.full_name;
+                document.getElementById('metric-hub-name').innerText = updatedPayload.destination_hub || "Global Route Node";
+                document.getElementById('metric-user-phone').innerText = updatedPayload.phone_number;
+                await pullFreightOrdersPayload(); // Recalculate based on newly registered phone number lines
+            } else {
+                showDashToast("Database mutation rejected: " + error.message, true);
+            }
+        }
+
+        async function rotateSecurityToken() {
+            const pass = document.getElementById('set-new-password').value;
+            if(!pass || pass.length < 6) {
+                showDashToast("Error: Passphrase must be at least 6 characters.", true);
+                return;
+            }
+            const { error } = await window.supabase.auth.updateUser({ password: pass });
+            if(!error) {
+                showDashToast("Cryptographic access token successfully updated.");
+                document.getElementById('set-new-password').value = '';
+            } else {
+                showDashToast("Security adjustment failed: " + error.message, true);
+            }
+        }
+
+        // --- SOCIAL ENGAGEMENT ARCHITECTURE ---
+        function renderSocialCommentStream() {
+            const container = document.getElementById('dashboard-comments-container');
+            if(!container) return;
+            container.innerHTML = '';
+            
+            globalCommentsMock.forEach(comment => {
+                const node = document.createElement('div');
+                node.className = 'comment-node';
+                node.innerHTML = `
+                    <div style="font-size:13px; font-weight:700; color:var(--dash-blue-deep); margin-bottom:4px;">${comment.author}</div>
+                    <div style="font-size:13px; opacity:0.9; line-height:1.4;">${comment.body}</div>
+                    <div class="reaction-row">
+                        <button class="react-pill" onclick="triggerNodeReaction(${comment.id}, '👍')">👍 <span>${comment.reactions['👍'] || 0}</span></button>
+                        <button class="react-pill" onclick="triggerNodeReaction(${comment.id}, '🚀')">🚀 <span>${comment.reactions['🚀'] || 0}</span></button>
+                        <button class="react-pill" onclick="triggerNodeReaction(${comment.id}, '❤️')">❤️ <span>${comment.reactions['❤️'] || 0}</span></button>
+                    </div>
+                `;
+                container.appendChild(node);
+            });
+        }
+
+        function submitDashComment(e) {
+            e.preventDefault();
+            const authorInput = document.getElementById('dash-comment-author');
+            const bodyInput = document.getElementById('dash-comment-body');
+            
+            const newComment = {
+                id: globalCommentsMock.length + 1,
+                author: authorInput.value.trim(),
+                body: bodyInput.value.trim(),
+                reactions: { "👍": 1 }
+            };
+            
+            globalCommentsMock.unshift(newComment);
+            renderSocialCommentStream();
+            bodyInput.value = '';
+            showDashToast("Social package injected successfully.");
+        }
+
+        function triggerNodeReaction(id, emoji) {
+            const item = globalCommentsMock.find(c => c.id === id);
+            if(item) {
+                if(!item.reactions[emoji]) item.reactions[emoji] = 0;
+                item.reactions[emoji]++;
+                renderSocialCommentStream();
+                createExplosionBurstParticles();
+            }
+        }
+
+        // --- IMMERSIVE ECOSYSTEM DIGITAL GARDEN CANVAS ANIMATION ENGINE ---
+        function setupInteractiveGardenCanvas() {
+            canvas = document.getElementById("garden-canvas");
+            if(!canvas) return;
+            ctx = canvas.getContext("2d");
+            
+            resizeGardenViewport();
+            window.addEventListener("resize", resizeGardenViewport);
+
+            // Seed procedural garden items arrays
+            randomizeGardenGrowth();
+
+            // Run core requestAnimationFrame matrix loop
+            requestAnimationFrame(tickGardenEcosystemFrame);
+        }
+
+        function resizeGardenViewport() {
+            if(!canvas) return;
+            const d = canvas.getBoundingClientRect();
+            canvas.width = d.width;
+            canvas.height = 220;
+        }
+
+        function randomizeGardenGrowth() {
+            flowers = [];
+            grassBlades = [];
+            butterflies = [];
+            ambientParticles = [];
+
+            // Seed grass blades with harmonic offset frequencies
+            const bladeCount = Math.floor(window.innerWidth / 8);
+            for(let i = 0; i < bladeCount; i++) {
+                grassBlades.push({
+                    x: (canvas.width / bladeCount) * i + Math.random() * 4,
+                    height: 45 + Math.random() * 35,
+                    bend: Math.random() * 10 - 5,
+                    speed: 0.02 + Math.random() * 0.02,
+                    phase: Math.random() * Math.PI
+                });
+            }
+
+            // Seed interactive elegant flowers along timeline plane
+            for(let i = 0; i < 7; i++) {
+                flowers.push({
+                    x: 60 + ((canvas.width - 120) / 6) * i + (Math.random() * 20 - 10),
+                    y: canvas.height - 15,
+                    stemHeight: 60 + Math.random() * 50,
+                    radius: 8 + Math.random() * 6,
+                    color: i % 2 === 0 ? '#2563eb' : '#38bdf8',
+                    petalCount: 5 + Math.floor(Math.random() * 4),
+                    swayOffset: Math.random() * Math.PI
+                });
+            }
+
+            // Seed soft ambient butterflies
+            for(let i = 0; i < 4; i++) {
+                butterflies.push({
+                    x: Math.random() * canvas.width,
+                    y: 40 + Math.random() * 100,
+                    vx: 0.5 + Math.random() * 1,
+                    vy: Math.random() * 0.6 - 0.3,
+                    wingPhase: Math.random() * Math.PI,
+                    color: '#3b82f6'
+                });
+            }
+
+            // Floating luminous pollen particles
+            for(let i = 0; i < 25; i++) {
+                ambientParticles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: 1 + Math.random() * 2,
+                    alpha: 0.2 + Math.random() * 0.6,
+                    speedY: 0.1 + Math.random() * 0.3,
+                    phase: Math.random() * Math.PI
+                });
+            }
+        }
+
+        function toggleGardenMotion() {
+            animateGarden = !animateGarden;
+            showDashToast(animateGarden ? "Vector fields reactive." : "Biosphere timeline frame paused.");
+        }
+
+        function triggerGardenDancePulse() {
+            gardenPulseFactor = 2.5;
+            createExplosionBurstParticles();
+            showDashToast("Biosphere visual response rhythm pulse forced.");
+        }
+
+        function createExplosionBurstParticles() {
+            for(let i = 0; i < 15; i++) {
+                ambientParticles.push({
+                    x: Math.random() * canvas.width,
+                    y: canvas.height - 80,
+                    radius: 2 + Math.random() * 3,
+                    alpha: 1.0,
+                    speedY: -1.5 - Math.random() * 2,
+                    phase: Math.random() * Math.PI
+                });
+            }
+        }
+
+        function tickGardenEcosystemFrame(timestamp) {
+            if(!canvas || !ctx) return;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Apply wind vector calculation states based on sine mathematical waves
+            let timeFactor = timestamp * 0.0015;
+            let currentWindBend = Math.sin(timeFactor) * 12;
+
+            if (!animateGarden) {
+                currentWindBend = 2; // Fixed steady state if tracking is paused
+            }
+
+            // Decay audio pulse factors back gracefully down towards unit baseline values
+            if (gardenPulseFactor > 1.0) {
+                gardenPulseFactor -= 0.04;
+            } else {
+                gardenPulseFactor = 1.0;
+            }
+
+            // Render background skies context indicators
+            cloudOffset += 0.08;
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.07)';
+            ctx.beginPath();
+            ctx.arc(120 + (cloudOffset % canvas.width), 40, 30, 0, Math.PI * 2);
+            ctx.arc(150 + (cloudOffset % canvas.width), 35, 40, 0, Math.PI * 2);
+            ctx.arc(180 + (cloudOffset % canvas.width), 40, 30, 0, Math.PI * 2);
+            ctx.fill();
+
+            // 1. Render sway grass array strokes
+            grassBlades.forEach(blade => {
+                if (animateGarden) {
+                    blade.phase += blade.speed;
+                }
+                let dynamicBend = blade.bend + currentWindBend + (Math.sin(blade.phase) * 4);
+                
+                ctx.strokeStyle = '#1e3a8a';
+                ctx.globalAlpha = 0.08;
+                ctx.lineWidth = 2.5;
+                ctx.beginPath();
+                ctx.moveTo(blade.x, canvas.height);
+                ctx.quadraticCurveTo(blade.x, canvas.height - (blade.height * 0.5), blade.x + (dynamicBend * 0.6), canvas.height - blade.height);
+                ctx.stroke();
+            });
+
+            // 2. Render flowers stems and elegant geometric path petals
+            flowers.forEach(flower => {
+                let sway = Math.sin(timeFactor + flower.swayOffset) * 6 * gardenPulseFactor;
+                let topX = flower.x + sway + (currentWindBend * 0.4);
+                let topY = flower.y - flower.stemHeight;
+
+                // Draw deep modern blue connection stems
+                ctx.strokeStyle = '#3b82f6';
+                ctx.globalAlpha = 0.25;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(flower.x, flower.y);
+                ctx.quadraticCurveTo(flower.x + (sway * 0.3), flower.y - (flower.stemHeight * 0.5), topX, topY);
+                ctx.stroke();
+
+                // Draw geometric luxury petals nodes
+                ctx.globalAlpha = 0.85;
+                ctx.fillStyle = flower.color;
+                for(let i = 0; i < flower.petalCount; i++) {
+                    let angle = (Math.PI * 2 / flower.petalCount) * i + (timeFactor * 0.2);
+                    let petalRadius = flower.radius * gardenPulseFactor;
+                    let px = topX + Math.cos(angle) * (petalRadius * 0.9);
+                    let py = topY + Math.sin(angle) * (petalRadius * 0.9);
+                    
+                    ctx.beginPath();
+                    ctx.arc(px, py, petalRadius * 0.6, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                // Core flower center disk center point highlight
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath();
+                ctx.arc(topX, topY, flower.radius * 0.4, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // 3. Update & render ambient butterfly vector systems
+            butterflies.forEach(b => {
+                if (animateGarden) {
+                    b.x += b.vx;
+                    b.y += b.vy + Math.sin(timeFactor * 2) * 0.4;
+                    b.wingPhase += 0.25;
+                    
+                    if(b.x > canvas.width + 20) b.x = -20;
+                    if(b.y < 10 || b.y > canvas.height - 40) b.vy = -b.vy;
+                }
+
+                let wingWidth = 7 * Math.abs(Math.sin(b.wingPhase));
+                ctx.fillStyle = 'rgba(37, 99, 235, 0.7)';
+                ctx.globalAlpha = 0.8;
+                
+                // Draw elegant twin wing path strokes
+                ctx.beginPath();
+                ctx.ellipse(b.x - wingWidth, b.y - 3, wingWidth, 6, Math.PI/4, 0, Math.PI*2);
+                ctx.ellipse(b.x + wingWidth, b.y - 3, wingWidth, 6, -Math.PI/4, 0, Math.PI*2);
+                ctx.fill();
+            });
+
+            // 4. Update & draw particulate micro systems layer
+            ctx.globalAlpha = 1.0;
+            ambientParticles.forEach((p, idx) => {
+                if (animateGarden) {
+                    p.y += p.speedY;
+                    p.x += Math.sin(timeFactor + p.phase) * 0.2;
+                    
+                    // Recycle fallen or expired elements gracefully back upwards
+                    if (p.y > canvas.height) {
+                        p.y = -5;
+                        p.x = Math.random() * canvas.width;
+                        p.alpha = 0.2 + Math.random() * 0.6;
+                    }
+                }
+                
+                ctx.fillStyle = `rgba(37, 99, 235, ${p.alpha})`;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Continuous loop execution synchronization
+            requestAnimationFrame(tickGardenEcosystemFrame);
+        }
+
+        // --- NON-INTRUSIVE WEB AUDIO API AMBIENT SOUND GENERATION ENGINE ---
+        function toggleAmbientSynthesizer() {
+            if (!audioCtx) {
+                // Instantiate browser audio processing context ecosystem safely upon explicit interaction
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            const btn = document.getElementById('synth-toggle-btn');
+
+            if (soundIsPlaying) {
+                // Gracefully sever parameters and cease sound wave oscillation loops
+                if (ambientGainNode) {
+                    ambientGainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.3);
+                }
+                clearInterval(oscillatorIntervalId);
+                setTimeout(() => {
+                    if(ambientOscillator) ambientOscillator.stop();
+                    soundIsPlaying = false;
+                    btn.innerText = "Play Frequency";
+                    btn.style.background = "var(--dash-blue-deep)";
+                }, 350);
+            } else {
+                // Initialize premium continuous background modular synth layer node pipeline
+                ambientOscillator = audioCtx.createOscillator();
+                ambientGainNode = audioCtx.createGain();
+
+                // Generate smooth sine harmonic frequencies matching modern blue environments
+                ambientOscillator.type = 'sine';
+                ambientOscillator.frequency.setValueAtTime(220, audioCtx.currentTime); // A3 baseline key signature node
+
+                ambientGainNode.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+                ambientGainNode.gain.linearRampToValueAtTime(0.08, audioCtx.currentTime + 1.0); // Safe controlled low velocity decibels
+
+                ambientOscillator.connect(ambientGainNode);
+                ambientGainNode.connect(audioCtx.destination);
+                
+                ambientOscillator.start();
+                soundIsPlaying = true;
+                btn.innerText = "Mute Synth";
+                btn.style.background = "var(--dash-red)";
+
+                // Generate micro pentatonic wind-chime frequencies procedurally down execution queues
+                oscillatorIntervalId = setInterval(() => {
+                    if(!soundIsPlaying || !audioCtx) return;
+                    
+                    const chimeOsc = audioCtx.createOscillator();
+                    const chimeGain = audioCtx.createGain();
+                    
+                    chimeOsc.type = 'triangle';
+                    // Harmonic frequencies mapped explicitly within scale structures (E4, A4, B4, C#5, E5)
+                    const pentatonicBase = [329.63, 440.00, 493.88, 554.37, 659.25];
+                    const targetFreq = pentatonicBase[Math.floor(Math.random() * pentatonicBase.length)];
+                    
+                    chimeOsc.frequency.setValueAtTime(targetFreq, audioCtx.currentTime);
+                    chimeGain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+                    chimeGain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 2.5);
+                    
+                    chimeOsc.connect(chimeGain);
+                    chimeGain.connect(audioCtx.destination);
+                    
+                    chimeOsc.start();
+                    chimeOsc.stop(audioCtx.currentTime + 2.6);
+                    
+                    // Induce small micro physical reaction pulse down interactive digital landscape array lines
+                    gardenPulseFactor = 1.3;
+                }, 3000);
+            }
+        }
+
+        // --- REAL-TIME PORTAL DATABASE UPDATE ROUTING PIPELINES ---
+        function initializeRealtimeTelemetrySync() {
+            if(!window.supabase) return;
+
+            // Map and attach real-time Postgres event pipeline listener hooks matching index.html core architectures
+            window.supabase.channel('dashboard-live-orders-trigger')
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, async (payload) => {
+                    showDashToast("Real-time telemetry manifest change registered. Reloading matrix lines...");
+                    await pullFreightOrdersPayload();
+                }).subscribe();
+        }
+
+        // --- GENERAL SYSTEM MICRO INTERACTION ALERTS UI UTILITIES ---
+        function showDashToast(message, isAlert = false) {
+            const toast = document.getElementById('dash-toast-system');
+            if(!toast) return;
+            toast.innerText = message;
+            toast.style.borderLeftColor = isAlert ? 'var(--dash-red)' : 'var(--dash-blue-accent)';
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 4000);
+        }
+
+        async function logoutMainframe() {
+            if(window.supabase) {
+                await window.supabase.auth.signOut();
+            }
+            window.location.replace("index.html");
+        }
+    </script>
+</body>
+</html>
