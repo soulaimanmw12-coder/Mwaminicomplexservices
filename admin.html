@@ -236,7 +236,6 @@ let localFinanceCache = [];
 const conversionAnchorRates = { USD: 1, RWF: 1290 };
 window.productCacheMap = {};
 let debounceTimer;
-
 document.addEventListener("DOMContentLoaded", async () => {
 const root = document.documentElement;
 if(!window.supabase) { console.error("Supabase not found"); return; }
@@ -264,7 +263,6 @@ loadUsers();
 loadAnnouncements();
 loadSystemSettings();
 loadFinanceLedger();
-
 document.getElementById('order-search').addEventListener('input', () => {
 clearTimeout(debounceTimer);
 debounceTimer = setTimeout(renderOrdersTable, 300);
@@ -292,7 +290,6 @@ if (!error) showToast("System Configuration Saved");
 else alert(error.message);
 btn.innerText = "Save Configuration";
 });
-
 // --- User Management ---
 async function loadUsers() {
 const { data, error } = await window.supabase.from('profiles').select('*').order('created_at', { ascending: false });
@@ -379,21 +376,19 @@ showToast("Announcement Published Successfully");
 } catch (err) {
 alert("Upload failed: " + err.message);
 } finally {
-btn.disabled = false; btn.innerText = "Publish Announcement";
+btn.disabled = false;
+btn.innerText = "Publish Announcement";
 }
 });
-
 window.toggleAnnouncement = async (id, newStatus) => {
 await window.supabase.from('announcements').update({ active: newStatus }).eq('id', id);
 loadAnnouncements();
 };
-
 window.deleteAnnouncement = async (id) => {
 if(!confirm("Delete this announcement permanently?")) return;
 await window.supabase.from('announcements').delete().eq('id', id);
 loadAnnouncements();
 };
-
 // --- Comments & Support Logic ---
 async function loadCustomerComments() {
 const [{ data: reviews }, { data: inquiries } ] = await Promise.all([
@@ -428,13 +423,11 @@ window.updateTicketStatus = async (id, status) => {
 const { error } = await window.supabase.from('inquiries').update({ status }).eq('id', id);
 if (!error) { showToast("Ticket status updated to " + status); loadCustomerComments(); }
 };
-
 window.deleteEntry = async (table, id) => {
 if(!confirm("Are you sure you want to permanently remove this?")) return;
 await window.supabase.from(table).delete().eq('id', id);
 loadCustomerComments(); showToast("Entry deleted successfully.");
 };
-
 function showToast(msg) {
 const toast = document.getElementById("toast");
 toast.innerText = msg; toast.classList.add("show");
@@ -475,7 +468,6 @@ document.getElementById("metric-stock").innerHTML = `<div style="font-size:24px;
 document.getElementById("metric-orders").innerText = ords ? ords.length : 0;
 document.getElementById("metric-reviews").innerText = reviews ? reviews.length : 0;
 document.getElementById("metric-tickets").innerText = inquiries ? inquiries.filter(i => i.status !== 'Resolved').length : 0;
-
 // Dynamic Revenue Calculations
 let revTotal = 0, revDaily = 0, revWeekly = 0, revMonthly = 0;
 const now = new Date();
@@ -556,7 +548,6 @@ showToast("Financial Entry Recorded.");
 e.target.reset();
 loadFinanceLedger();
 });
-
 function renderLiveStock() {
 const tbody = document.getElementById("live-stock-body");
 tbody.innerHTML = '';
@@ -568,7 +559,6 @@ tr.innerHTML = `<td><strong>${escapeHTML(item.title)}</strong></td>
 tbody.appendChild(tr);
 });
 }
-
 // --- Inventory Logic ---
 function setupAdminSearchFilters() {
 const fc = document.getElementById("inventory-filter-container");
@@ -600,7 +590,7 @@ localAdminInventoryCache = data;
 window.productCacheMap = {};
 data.forEach(p => window.productCacheMap[p.id] = p);
 document.getElementById("admin-search-box").dispatchEvent(new Event("input"));
-renderLiveStock(); 
+renderLiveStock();
 }
 }
 
@@ -648,13 +638,11 @@ document.getElementById("sku-currency-type").value = sku.description?.includes("
 document.getElementById("sku-file").dataset.existingUrl = sku.image_url || "";
 container.scrollIntoView({ behavior: 'smooth' });
 };
-
 window.safeDelete = async function(id) {
 if(!confirm("Proceed with purging this commodity from database?")) return;
 const { error } = await window.supabase.from('products').delete().eq('id', id);
 if (!error) { showToast("Commodity purged."); loadInventoryControlMatrix(); loadAnalyticsDashboard(); }
 };
-
 window.openNewProductForm = () => {
 const container = document.getElementById("product-form-container");
 container.style.display = container.style.display === 'none' ? 'block' : 'none';
@@ -669,7 +657,6 @@ try {
 const id = document.getElementById("sku-id").value;
 const fileInput = document.getElementById("sku-file");
 let assetUrl = fileInput.dataset.existingUrl || "";
-
 if(fileInput.files.length > 0) {
 const file = fileInput.files[0];
 const fp = `images/${Date.now()}-${file.name.replace(/[^a-z0-9.]/gi, '_')}`;
@@ -688,7 +675,6 @@ image_url: assetUrl || null
 };
 if (id) await window.supabase.from('products').update(payload).eq('id', id);
 else await window.supabase.from('products').insert([payload]);
-
 showToast(id ? "Record Updated" : "Entry Registered");
 openNewProductForm();
 loadInventoryControlMatrix();
@@ -713,7 +699,6 @@ if (!tbody) return;
 const term = document.getElementById("order-search").value.toLowerCase().trim();
 const statusFilter = document.getElementById("order-status-filter").value;
 const dateFilter = document.getElementById("order-date-filter").value;
-
 const filtered = rawOrdersCache.filter(o => {
 const matchesSearch = (o.customer_name?.toLowerCase().includes(term) || o.id.toLowerCase().includes(term));
 const matchesStatus = (statusFilter === "All" || o.status === statusFilter);
