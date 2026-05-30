@@ -10,33 +10,41 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+
 <div id="dynamic-announcement" class="announcement-banner"></div>
 <div id="global-toast" class="toast-ui">Notification Dispatched</div>
+
 <header>
 <div style="display: flex; align-items: center; gap: 10px;">
 <img src="https://sdxtdkroyolagmjaipgw.supabase.co/storage/v1/object/public/product-assets/Company%20logo.jpg" alt="Mwamini Logo" style="height: 40px; border-radius: 4px; filter: invert(1);">
 <div class="brand-title">Mwamini complex services & Trading Portal</div>
 </div>
+
 <div style="display: flex; gap: 1rem; align-items: center;">
 <div id="live-users-container" style="display: none;">
 <span class="live-users-badge">
-<span class="live-users-pulse"></span>
+<span class="live-users-pulse"></span> 
 <span id="live-users-count">0</span> Online
 </span>
 </div>
+
 <button id="theme-toggle" class="btn" style="width:auto; padding:0.5rem 1rem; background: var(--border-color); color: var(--text-main);">Theme</button>
+
 <div id="guest-nav" class="user-nav-group">
-<button onclick="openAuthModal('login')" class="btn" style="font-size:14px; padding:0.5rem 1rem;">Sign In</button>
-<button onclick="openAuthModal('register')" class="btn btn-primary" style="font-size: 14px; padding:0.5rem 1rem;">Register</button>
+<button onclick="openAuthModal('login')" class="btn" style="font-size:14px; padding:0.5rem 1rem;">Login</button>
+<button onclick="openAuthModal('register')" class="btn btn-primary" style="font-size:14px; padding:0.5rem 1rem;">Register</button>
 </div>
+
 <div id="user-nav" class="user-nav-group" style="display:none;">
 <span id="auth-user-name"></span>
 <button onclick="openUserDashboard()" class="btn btn-primary" style="font-size:14px; padding:0.5rem 1rem;">My Account</button>
 <button onclick="logoutUser()" class="btn" style="font-size:14px; padding:0.5rem 1rem; background:var(--danger); color:white;">Logout</button>
 </div>
-<button class="btn" style="font-size:14px; padding:0.5rem 1rem; background:transparent; border: 1px solid var(--border-color);" onclick="openVerificationModal()">Admin</button>
+
+<button onclick="openVerificationModal()" class="btn" style="font-size:14px; padding:0.5rem 1rem; background:transparent; border: 1px solid var(--border-color);">Admin</button>
 </div>
 </header>
+
 <section style="background: linear-gradient(135deg, #1e3a8a, #3b82f6); color: white; padding: 4rem 5%; text-align: center; border-bottom: 4px solid #10b981;">
 <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">Welcome to Mwamini complex services & Trading Portal</h1>
 <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 0.5rem;">
@@ -45,13 +53,16 @@ Our commitment is to ensure every item meets strict standards of value and relia
 We aim to provide a smooth and satisfying experience that consistently exceeds expectations.
 </p>
 </section>
+
 <section id="public-announcements-feed" style="padding: 2rem 5%; background: var(--bg-primary); display: none;">
 <h3 style="margin-bottom: 1.5rem; font-size: 1.2rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; display: inline-block;">Latest Updates</h3>
 <div id="public-announcements-container"></div>
 </section>
+
 <section style="padding: 1rem 5%; text-align: center; border-bottom: 1px solid var(--border-color); font-size: 0.8rem; color: var(--text-muted);">
 Trusted Global Supply Chain &nbsp;&bull;&nbsp; we love you for life &nbsp;&bull;&nbsp; Secure Dispatch Verified
 </section>
+
 <div class="search-filter-bar">
 <input type="text" id="search-input" class="search-input" style="flex:2;" placeholder="Search our delicious selection (e.g. Rice, Fertilizer)...">
 <select id="category-filter" class="filter-select" style="flex:1;">
@@ -66,45 +77,50 @@ Trusted Global Supply Chain &nbsp;&bull;&nbsp; we love you for life &nbsp;&bull;
 <option value="Others">Others</option>
 </select>
 <select id="currency-select" class="filter-select" style="max-width: 150px;">
-<option value="USD">us USD ($)</option>
-<option value="RWF">RW RWF (Fr)</option>
-<option value="RUB">RU RUB (P)</option>
+<option value="USD">🇺🇸 USD ($)</option>
+<option value="RWF">🇷🇼 RWF (Fr)</option>
+<option value="RUB">🇷🇺 RUB (₽)</option>
+<option value="CNY">CH RUB (CNY)</option>
 </select>
 </div>
+
 <main class="products-grid" id="products-container" style="margin-bottom: 2rem;"></main>
+
 <div class="modal" id="details-modal">
 <div class="modal-content">
-<button type="button" class="close-modal-btn" onclick="closeDetailsModal()">×</button>
+<button type="button" class="close-modal-btn" onclick="closeDetailsModal()">✕</button>
 <h2 id="details-title" style="margin-bottom: 1rem;"></h2>
 <p id="details-desc" style="color: var(--text-muted); line-height: 1.6;"></p>
 </div>
 </div>
+
 <div class="modal" id="auth-modal">
 <div class="modal-content">
-<button type="button" class="close-modal-btn" onclick="closeAuthModal()">X</button>
+<button type="button" class="close-modal-btn" onclick="closeAuthModal()">✕</button>
 <h2 id="auth-title" style="margin-bottom: 1rem;">Sign In</h2>
 <form id="auth-form">
 <input type="hidden" id="auth-mode" value="login">
 <div id="register-fields" style="display:none;">
 <label style="display:block; margin: 0.5rem 0 0.25rem;">Full Name</label>
-<input type="text" id="reg-name" class="search-input" style="width:100%; margin-bottom: 1rem;">
+<input type="text" id="reg-name" class="search-input" style="width:100%; margin-bottom:1rem;">
 <label style="display:block; margin: 0.5rem 0 0.25rem;">Phone Number (+250...)</label>
 <input type="text" id="reg-phone" class="search-input" style="width:100%; margin-bottom:0.25rem;" placeholder="+250780000000">
 <span id="phone-error" class="error-text"></span>
 <label style="display:block; margin: 0.5rem 0 0.25rem;">Current Location</label>
-<input type="text" id="reg-location" class="search-input" style="width:100%; margin-bottom: 1rem;">
+<input type="text" id="reg-location" class="search-input" style="width:100%; margin-bottom:1rem;">
 <label style="display:block; margin: 0.5rem 0 0.25rem;">Delivery Destination / Hub</label>
-<input type="text" id="reg-dest" class="search-input" style="width:100%; margin-bottom: 1rem;">
+<input type="text" id="reg-dest" class="search-input" style="width:100%; margin-bottom:1rem;">
 </div>
 <label style="display:block; margin: 0.5rem 0 0.25rem;">Email Address</label>
-<input type="email" id="auth-email" class="search-input" style="width:100%; margin-bottom: 1rem;" required>
+<input type="email" id="auth-email" class="search-input" style="width:100%; margin-bottom:1rem;" required>
 <label style="display:block; margin: 0.5rem 0 0.25rem;">Password</label>
-<input type="password" id="auth-password" class="search-input" style="width:100%; margin-bottom: 1.5rem;" required>
+<input type="password" id="auth-password" class="search-input" style="width:100%; margin-bottom:1.5rem;" required>
 <button type="submit" id="auth-submit-btn" class="btn btn-primary" style="width: 100%;">Sign In</button>
-<p style="text-align:center; margin-top: 1rem; font-size:14px; cursor:pointer; color:var(--accent);" onclick="toggleAuthMode()">Toggle Login/Register</p>
+<p style="text-align:center; margin-top:1rem; font-size:14px; cursor:pointer; color:var(--accent);" onclick="toggleAuthMode()">Toggle Login / Register</p>
 </form>
 </div>
 </div>
+
 <div class="modal" id="profile-completion-modal">
 <div class="modal-content" style="text-align: center;">
 <h2 style="margin-bottom: 1rem;">Complete Your Profile</h2>
@@ -116,9 +132,10 @@ Trusted Global Supply Chain &nbsp;&bull;&nbsp; we love you for life &nbsp;&bull;
 </form>
 </div>
 </div>
+
 <div class="modal" id="user-dashboard-modal">
 <div class="modal-content" style="max-width: 900px; padding: 2rem;">
-<button type="button" class="close-modal-btn" onclick="closeUserDashboard()">X</button>
+<button type="button" class="close-modal-btn" onclick="closeUserDashboard()">✕</button>
 <h2 style="margin-bottom: 1.5rem;">My Account Dashboard</h2>
 <div style="margin-bottom: 2rem; background: var(--blue-light, #eff6ff); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--accent); display: flex; justify-content: space-between; align-items: center;">
 <div>
@@ -132,8 +149,8 @@ Trusted Global Supply Chain &nbsp;&bull;&nbsp; we love you for life &nbsp;&bull;
 <h3 style="margin-bottom: 1rem;">Profile Identity</h3>
 <div style="text-align: center; margin-bottom: 1.5rem;">
 <img id="dash-avatar" class="user-avatar-preview" style="margin:0 auto 1rem auto;" src="" alt="Profile">
-<form id="dash-avatar-update-form" style="display: flex; flex-direction:column; gap:0.5rem; align-items:center;">
-<input type="file" id="dash-avatar-upload" accept="image/*" class="search-input" style="width: 100%; font-size: 12px; padding:0.5rem;" required>
+<form id="dash-avatar-update-form" style="display:flex; flex-direction:column; gap:0.5rem; align-items:center;">
+<input type="file" id="dash-avatar-upload" accept="image/*" class="search-input" style="width: 100%; font-size:12px; padding:0.5rem;" required>
 <button type="submit" class="btn btn-primary" style="width: 100%; padding:0.5rem; font-size:12px;">Update Avatar</button>
 </form>
 </div>
@@ -158,42 +175,45 @@ Trusted Global Supply Chain &nbsp;&bull;&nbsp; we love you for life &nbsp;&bull;
 </div>
 </div>
 </div>
+
 <div class="modal" id="verification-modal">
 <div class="modal-content glass-panel" style="text-align: center; max-width: 400px;">
-<button type="button" class="close-modal-btn" onclick="closeVerificationModal()">X</button>
+<button type="button" class="close-modal-btn" onclick="closeVerificationModal()">✕</button>
 <h2 style="margin-bottom: 1rem; color: var(--text-main);">Admin Verification</h2>
 <input type="password" id="verification-pin" class="search-input" style="width: 100%; text-align: center; font-size: 1.2rem; letter-spacing: 2px; margin-bottom: 1rem;" placeholder="Enter Access Code">
 <p id="verification-error" style="color: var(--danger); font-size: 13px; height: 18px; margin-bottom: 1rem;"></p>
 <button onclick="verifyAdminAccess()" class="btn btn-primary" style="width: 100%;">Verify Access</button>
 </div>
 </div>
+
 <div class="modal" id="order-modal">
 <div class="modal-content">
-<button type="button" class="close-modal-btn" onclick="closeOrderModal()">X</button>
+<button type="button" class="close-modal-btn" onclick="closeOrderModal()">✕</button>
 <h3 style="margin-bottom: 1.5rem; padding-right: 2rem;" id="modal-product-title">Place Order Submission</h3>
 <form id="order-submission-form">
 <input type="hidden" id="form-product-id">
 <input type="hidden" id="form-product-title-val">
 <label style="display:block; margin: 0.5rem 0 0.25rem;">Full Name</label>
-<input type="text" id="cust-name" class="search-input" style="width: 100%; margin-bottom: 1rem;" required>
+<input type="text" id="cust-name" class="search-input" style="width:100%; margin-bottom:1rem;" required>
 <label style="display:block; margin: 0.5rem 0 0.25rem;">Phone Number</label>
-<input type="tel" id="cust-phone" class="search-input" style="width:100%; margin-bottom: 1rem;" required>
+<input type="tel" id="cust-phone" class="search-input" style="width:100%; margin-bottom:1rem;" required>
 <label style="display:block; margin: 0.5rem 0 0.25rem;">Quantity Requested</label>
-<input type="number" id="cust-qty" class="search-input" value="1" min="1" style="width:100%; margin-bottom: 1rem;" required>
+<input type="number" id="cust-qty" value="1" min="1" class="search-input" style="width:100%; margin-bottom:1rem;" required>
 <label style="display:block; margin: 0.5rem 0 0.25rem;">Delivery Destination / Hub</label>
-<input type="text" id="cust-location" class="search-input" style="width:100%; margin-bottom: 1rem;" required>
+<input type="text" id="cust-location" class="search-input" style="width:100%; margin-bottom:1rem;" required>
 <label style="display:block; margin: 0.5rem 0 0.25rem;">Special Notes or Freight Requests</label>
-<textarea id="cust-notes" class="search-input" style="width:100%; height:80px; margin-bottom: 1.5rem;"></textarea>
+<textarea id="cust-notes" class="search-input" style="width:100%; height:80px; margin-bottom:1.5rem;"></textarea>
 <button type="submit" id="submit-order-btn" class="btn btn-primary" style="width: 100%;">Authorize & Transmit Order</button>
 </form>
 </div>
 </div>
+
 <section class="feedback-section" style="padding: 4rem 5%; background: var(--bg-surface); border-top: 1px solid var(--border-color);">
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 4rem; max-width: 1200px; margin: 0 auto;">
 <div class="feedback-col">
 <h2 style="margin-bottom: 0.5rem;">Share Your Experience</h2>
 <form id="review-form">
-<label style="display:block; margin-bottom: 0.5rem; font-weight:600; font-size: 14px;">Your Name/Enterprise</label>
+<label style="display:block; margin-bottom: 0.5rem; font-weight:600; font-size: 14px;">Your Name / Enterprise</label>
 <input type="text" id="review-name" class="search-input" style="width: 100%; margin-bottom: 1.5rem; border-radius: 8px;" placeholder="e.g. Acme Logistics Corp" required>
 <label style="display:block; margin-bottom: 0.5rem; font-weight:600; font-size: 14px;">Service Dispatch Rating</label>
 <select id="review-rating" class="filter-select" style="width: 100%; margin-bottom: 1.5rem; border-radius: 8px;" required>
@@ -264,7 +284,8 @@ Trusted Global Supply Chain &nbsp;&bull;&nbsp; we love you for life &nbsp;&bull;
 let localProductsCache = [];
 let currentUser = null;
 let currentUserProfile = null;
-const exchangeRates = { USD: 1, RWF: 1290, RUB: 91.5 };
+const exchangeRates = { USD: 1, RWF: 1290, RUB: 91.5, CNY: 215.72};
+
 document.addEventListener("DOMContentLoaded", async () => {
 initializePublicCatalog();
 setupSearchFilters();
@@ -333,13 +354,9 @@ document.getElementById('auth-submit-btn').innerText = mode === 'login' ? 'Sign 
 document.getElementById('auth-modal').classList.add('active');
 }
 
-function closeAuthModal() { document.getElementById('auth-modal').classList.remove('active');
-}
-function toggleAuthMode() { const current = document.getElementById('auth-mode').value; 
-openAuthModal(current === 'login' ? 'register' : 'login');
-}
-function validatePhone(phone) { const phoneRegex = /^\+250\d{9}$/; return phoneRegex.test(phone);
-}
+function closeAuthModal() { document.getElementById('auth-modal').classList.remove('active'); }
+function toggleAuthMode() { const current = document.getElementById('auth-mode').value; openAuthModal(current === 'login' ? 'register' : 'login'); }
+function validatePhone(phone) { const phoneRegex = /^\+250\d{9}$/; return phoneRegex.test(phone); }
 
 document.getElementById('auth-form').addEventListener('submit', async (e) => {
 e.preventDefault();
@@ -378,6 +395,7 @@ showToast("Logged in successfully.");
 }
 } catch (error) { alert(error.message); } finally { btn.disabled = false; }
 });
+
 async function logoutUser() {
 await window.supabase.auth.signOut();
 currentUser = null;
@@ -399,8 +417,7 @@ if (updateError) throw updateError;
 return publicUrlData.publicUrl;
 }
 
-document.getElementById('profile-completion-form').addEventListener('submit', async (e) => 
-{
+document.getElementById('profile-completion-form').addEventListener('submit', async (e) => {
 e.preventDefault();
 try {
 await handleProfileUpload(document.getElementById('avatar-upload'));
@@ -425,6 +442,7 @@ showToast("Avatar Updated Successfully.");
 btn.innerText = "Update Avatar"; btn.disabled = false; e.target.reset();
 }
 });
+
 async function openUserDashboard() {
 if(!currentUserProfile) return;
 document.getElementById('dash-name').innerText = currentUserProfile.full_name || 'N/A';
@@ -467,6 +485,7 @@ if (error) throw error;
 const banner = document.getElementById('dynamic-announcement');
 const feedContainer = document.getElementById('public-announcements-container');
 const feedSection = document.getElementById('public-announcements-feed');
+
 if (!data || data.length === 0) {
 banner.classList.remove('active');
 feedSection.style.display = 'none';
@@ -474,7 +493,7 @@ return;
 }
 banner.innerText = data[0].content;
 banner.classList.add('active');
-feedSection.style.display = 'block';
+feedSection.style.display = 'block'; 
 feedContainer.innerHTML = '';
 
 data.forEach(a => {
@@ -502,6 +521,7 @@ document.getElementById('details-modal').classList.add('active');
 }
 };
 window.closeDetailsModal = () => document.getElementById('details-modal').classList.remove('active');
+
 async function likeProduct(title) {
 const { error } = await window.supabase.from('inquiries').insert([{
 name: currentUserProfile ? currentUserProfile.full_name : "Guest User", 
@@ -531,6 +551,7 @@ e.target.reset();
 } catch (err) { alert(`Routing failed: ${err.message}`);
 } finally { btn.disabled = false; btn.innerText = "Submit Review"; }
 });
+
 document.getElementById("inquiry-form").addEventListener("submit", async (e) => {
 e.preventDefault();
 const btn = e.target.querySelector('button[type="submit"]');
@@ -592,8 +613,7 @@ const isLowStock = item.quantity > 0 && item.quantity <= 3;
 const finalMediaUrl = item.image_url ? (item.image_url.startsWith('http') ? item.image_url : window.supabase.storage.from('product-assets').getPublicUrl(item.image_url).data.publicUrl) : "https://via.placeholder.com/400x300?text=No+Asset";
 
 let badgeHTML = '';
-if (isOutOfStock) { badgeHTML = '<span class="stock-badge bg-danger">Out of Stock</span>';
-} 
+if (isOutOfStock) { badgeHTML = '<span class="stock-badge bg-danger">Out of Stock</span>'; } 
 else if (isLowStock) { badgeHTML = '<span class="stock-badge bg-warning">Limited Stock</span>'; }
 
 const cardNode = document.createElement("div");
@@ -633,6 +653,7 @@ document.getElementById('cust-location').value = currentUserProfile.delivery_des
 }
 document.getElementById('order-modal').classList.add('active');
 };
+
 window.closeOrderModal = () => document.getElementById('order-modal').classList.remove('active');
 
 function initializeOrderFulfillmentEngine() {
@@ -665,6 +686,7 @@ if (error) { alert(`Routing failed: ${error.message}`); btn.disabled = false; re
 
 const updatedQty = targetedProduct.quantity - requestedQty;
 await window.supabase.from('products').update({ quantity: updatedQty }).eq('id', productId);
+
 showToast("Transaction Processed Successfully!");
 closeOrderModal();
 e.target.reset();
