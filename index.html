@@ -10,41 +10,33 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-
 <div id="dynamic-announcement" class="announcement-banner"></div>
 <div id="global-toast" class="toast-ui">Notification Dispatched</div>
-
 <header>
 <div style="display: flex; align-items: center; gap: 10px;">
 <img src="https://sdxtdkroyolagmjaipgw.supabase.co/storage/v1/object/public/product-assets/Company%20logo.jpg" alt="Mwamini Logo" style="height: 40px; border-radius: 4px; filter: invert(1);">
 <div class="brand-title">Mwamini complex services & Trading Portal</div>
 </div>
-
 <div style="display: flex; gap: 1rem; align-items: center;">
 <div id="live-users-container" style="display: none;">
 <span class="live-users-badge">
-<span class="live-users-pulse"></span> 
+<span class="live-users-pulse"></span>
 <span id="live-users-count">0</span> Online
 </span>
 </div>
-
 <button id="theme-toggle" class="btn" style="width:auto; padding:0.5rem 1rem; background: var(--border-color); color: var(--text-main);">Theme</button>
-
 <div id="guest-nav" class="user-nav-group">
 <button onclick="openAuthModal('login')" class="btn" style="font-size:14px; padding:0.5rem 1rem;">Login</button>
-<button onclick="openAuthModal('register')" class="btn btn-primary" style="font-size:14px; padding:0.5rem 1rem;">Register</button>
+<button onclick="openAuthModal('register')" class="btn btn-primary" style="font-size: 14px; padding:0.5rem 1rem;">Register</button>
 </div>
-
 <div id="user-nav" class="user-nav-group" style="display:none;">
 <span id="auth-user-name"></span>
-<button onclick="openUserDashboard()" class="btn btn-primary" style="font-size:14px; padding:0.5rem 1rem;">My Account</button>
+<button onclick="openUserDashboard()" class="btn btn-primary" style="font-size: 14px; padding:0.5rem 1rem;">My Account</button>
 <button onclick="logoutUser()" class="btn" style="font-size:14px; padding:0.5rem 1rem; background:var(--danger); color:white;">Logout</button>
 </div>
-
 <button onclick="openVerificationModal()" class="btn" style="font-size:14px; padding:0.5rem 1rem; background:transparent; border: 1px solid var(--border-color);">Admin</button>
 </div>
 </header>
-
 <section style="background: linear-gradient(135deg, #1e3a8a, #3b82f6); color: white; padding: 4rem 5%; text-align: center; border-bottom: 4px solid #10b981;">
 <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">Welcome to Mwamini complex services & Trading Portal</h1>
 <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 0.5rem;">
@@ -53,16 +45,13 @@ Our commitment is to ensure every item meets strict standards of value and relia
 We aim to provide a smooth and satisfying experience that consistently exceeds expectations.
 </p>
 </section>
-
 <section id="public-announcements-feed" style="padding: 2rem 5%; background: var(--bg-primary); display: none;">
 <h3 style="margin-bottom: 1.5rem; font-size: 1.2rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; display: inline-block;">Latest Updates</h3>
 <div id="public-announcements-container"></div>
 </section>
-
 <section style="padding: 1rem 5%; text-align: center; border-bottom: 1px solid var(--border-color); font-size: 0.8rem; color: var(--text-muted);">
 Trusted Global Supply Chain &nbsp;&bull;&nbsp; we love you for life &nbsp;&bull;&nbsp; Secure Dispatch Verified
 </section>
-
 <div class="search-filter-bar">
 <input type="text" id="search-input" class="search-input" style="flex:2;" placeholder="Search our delicious selection (e.g. Rice, Fertilizer)...">
 <select id="category-filter" class="filter-select" style="flex:1;">
@@ -77,50 +66,46 @@ Trusted Global Supply Chain &nbsp;&bull;&nbsp; we love you for life &nbsp;&bull;
 <option value="Others">Others</option>
 </select>
 <select id="currency-select" class="filter-select" style="max-width: 150px;">
-<option value="USD">🇺🇸 USD ($)</option>
-<option value="RWF">🇷🇼 RWF (Fr)</option>
-<option value="RUB">🇷🇺 RUB (₽)</option>
-<option value="CNY">CH CNY (CNY)</option>
+<option value="USD">us USD ($)</option>
+<option value="RWF">RW RWF (Fr)</option>
+<option value="RUB">RU RUB (₽)</option>
+<option value="CNY">CH CNY (¥)</option>
 </select>
 </div>
-
 <main class="products-grid" id="products-container" style="margin-bottom: 2rem;"></main>
-
 <div class="modal" id="details-modal">
 <div class="modal-content">
-<button type="button" class="close-modal-btn" onclick="closeDetailsModal()">✕</button>
+<button type="button" class="close-modal-btn" onclick="closeDetailsModal()">×</button>
 <h2 id="details-title" style="margin-bottom: 1rem;"></h2>
 <p id="details-desc" style="color: var(--text-muted); line-height: 1.6;"></p>
 </div>
 </div>
-
 <div class="modal" id="auth-modal">
 <div class="modal-content">
-<button type="button" class="close-modal-btn" onclick="closeAuthModal()">✕</button>
+<button type="button" class="close-modal-btn" onclick="closeAuthModal()">×</button>
 <h2 id="auth-title" style="margin-bottom: 1rem;">Sign In</h2>
 <form id="auth-form">
 <input type="hidden" id="auth-mode" value="login">
 <div id="register-fields" style="display:none;">
 <label style="display:block; margin: 0.5rem 0 0.25rem;">Full Name</label>
-<input type="text" id="reg-name" class="search-input" style="width:100%; margin-bottom:1rem;">
+<input type="text" id="reg-name" class="search-input" style="width:100%; margin-bottom: 1rem;">
 <label style="display:block; margin: 0.5rem 0 0.25rem;">Phone Number (+250...)</label>
 <input type="text" id="reg-phone" class="search-input" style="width:100%; margin-bottom:0.25rem;" placeholder="+250780000000">
 <span id="phone-error" class="error-text"></span>
 <label style="display:block; margin: 0.5rem 0 0.25rem;">Current Location</label>
-<input type="text" id="reg-location" class="search-input" style="width:100%; margin-bottom:1rem;">
+<input type="text" id="reg-location" class="search-input" style="width:100%; margin-bottom: 1rem;">
 <label style="display:block; margin: 0.5rem 0 0.25rem;">Delivery Destination / Hub</label>
-<input type="text" id="reg-dest" class="search-input" style="width:100%; margin-bottom:1rem;">
+<input type="text" id="reg-dest" class="search-input" style="width:100%; margin-bottom: 1rem;">
 </div>
 <label style="display:block; margin: 0.5rem 0 0.25rem;">Email Address</label>
-<input type="email" id="auth-email" class="search-input" style="width:100%; margin-bottom:1rem;" required>
+<input type="email" id="auth-email" class="search-input" style="width:100%; margin-bottom: 1rem;" required>
 <label style="display:block; margin: 0.5rem 0 0.25rem;">Password</label>
-<input type="password" id="auth-password" class="search-input" style="width:100%; margin-bottom:1.5rem;" required>
+<input type="password" id="auth-password" class="search-input" style="width:100%; margin-bottom: 1.5rem;" required>
 <button type="submit" id="auth-submit-btn" class="btn btn-primary" style="width: 100%;">Sign In</button>
-<p style="text-align:center; margin-top:1rem; font-size:14px; cursor:pointer; color:var(--accent);" onclick="toggleAuthMode()">Toggle Login / Register</p>
+<p style="text-align:center; margin-top: 1rem; font-size:14px; cursor:pointer; color:var(--accent);" onclick="toggleAuthMode()">Toggle Login/Register</p>
 </form>
 </div>
 </div>
-
 <div class="modal" id="profile-completion-modal">
 <div class="modal-content" style="text-align: center;">
 <h2 style="margin-bottom: 1rem;">Complete Your Profile</h2>
@@ -132,10 +117,9 @@ Trusted Global Supply Chain &nbsp;&bull;&nbsp; we love you for life &nbsp;&bull;
 </form>
 </div>
 </div>
-
 <div class="modal" id="user-dashboard-modal">
 <div class="modal-content" style="max-width: 900px; padding: 2rem;">
-<button type="button" class="close-modal-btn" onclick="closeUserDashboard()">✕</button>
+<button type="button" class="close-modal-btn" onclick="closeUserDashboard()">×</button>
 <h2 style="margin-bottom: 1.5rem;">My Account Dashboard</h2>
 <div style="margin-bottom: 2rem; background: var(--blue-light, #eff6ff); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--accent); display: flex; justify-content: space-between; align-items: center;">
 <div>
@@ -149,8 +133,8 @@ Trusted Global Supply Chain &nbsp;&bull;&nbsp; we love you for life &nbsp;&bull;
 <h3 style="margin-bottom: 1rem;">Profile Identity</h3>
 <div style="text-align: center; margin-bottom: 1.5rem;">
 <img id="dash-avatar" class="user-avatar-preview" style="margin:0 auto 1rem auto;" src="" alt="Profile">
-<form id="dash-avatar-update-form" style="display:flex; flex-direction:column; gap:0.5rem; align-items:center;">
-<input type="file" id="dash-avatar-upload" accept="image/*" class="search-input" style="width: 100%; font-size:12px; padding:0.5rem;" required>
+<form id="dash-avatar-update-form" style="display: flex; flex-direction:column; gap:0.5rem; align-items:center;">
+<input type="file" id="dash-avatar-upload" accept="image/*" class="search-input" style="width: 100%; font-size: 12px; padding:0.5rem;" required>
 <button type="submit" class="btn btn-primary" style="width: 100%; padding:0.5rem; font-size:12px;">Update Avatar</button>
 </form>
 </div>
@@ -175,45 +159,42 @@ Trusted Global Supply Chain &nbsp;&bull;&nbsp; we love you for life &nbsp;&bull;
 </div>
 </div>
 </div>
-
 <div class="modal" id="verification-modal">
 <div class="modal-content glass-panel" style="text-align: center; max-width: 400px;">
-<button type="button" class="close-modal-btn" onclick="closeVerificationModal()">✕</button>
+<button type="button" class="close-modal-btn" onclick="closeVerificationModal()">×</button>
 <h2 style="margin-bottom: 1rem; color: var(--text-main);">Admin Verification</h2>
 <input type="password" id="verification-pin" class="search-input" style="width: 100%; text-align: center; font-size: 1.2rem; letter-spacing: 2px; margin-bottom: 1rem;" placeholder="Enter Access Code">
 <p id="verification-error" style="color: var(--danger); font-size: 13px; height: 18px; margin-bottom: 1rem;"></p>
 <button onclick="verifyAdminAccess()" class="btn btn-primary" style="width: 100%;">Verify Access</button>
 </div>
 </div>
-
 <div class="modal" id="order-modal">
 <div class="modal-content">
-<button type="button" class="close-modal-btn" onclick="closeOrderModal()">✕</button>
+<button type="button" class="close-modal-btn" onclick="closeOrderModal()">×</button>
 <h3 style="margin-bottom: 1.5rem; padding-right: 2rem;" id="modal-product-title">Place Order Submission</h3>
 <form id="order-submission-form">
 <input type="hidden" id="form-product-id">
 <input type="hidden" id="form-product-title-val">
 <label style="display:block; margin: 0.5rem 0 0.25rem;">Full Name</label>
-<input type="text" id="cust-name" class="search-input" style="width:100%; margin-bottom:1rem;" required>
+<input type="text" id="cust-name" class="search-input" style="width: 100%; margin-bottom: 1rem;" required>
 <label style="display:block; margin: 0.5rem 0 0.25rem;">Phone Number</label>
-<input type="tel" id="cust-phone" class="search-input" style="width:100%; margin-bottom:1rem;" required>
+<input type="tel" id="cust-phone" class="search-input" style="width:100%; margin-bottom: 1rem;" required>
 <label style="display:block; margin: 0.5rem 0 0.25rem;">Quantity Requested</label>
-<input type="number" id="cust-qty" value="1" min="1" class="search-input" style="width:100%; margin-bottom:1rem;" required>
+<input type="number" id="cust-qty" value="1" min="1" class="search-input" style="width:100%; margin-bottom: 1rem;" required>
 <label style="display:block; margin: 0.5rem 0 0.25rem;">Delivery Destination / Hub</label>
-<input type="text" id="cust-location" class="search-input" style="width:100%; margin-bottom:1rem;" required>
+<input type="text" id="cust-location" class="search-input" style="width:100%; margin-bottom: 1rem;" required>
 <label style="display:block; margin: 0.5rem 0 0.25rem;">Special Notes or Freight Requests</label>
-<textarea id="cust-notes" class="search-input" style="width:100%; height:80px; margin-bottom:1.5rem;"></textarea>
+<textarea id="cust-notes" class="search-input" style="width:100%; height:80px; margin-bottom: 1.5rem;"></textarea>
 <button type="submit" id="submit-order-btn" class="btn btn-primary" style="width: 100%;">Authorize & Transmit Order</button>
 </form>
 </div>
 </div>
-
 <section class="feedback-section" style="padding: 4rem 5%; background: var(--bg-surface); border-top: 1px solid var(--border-color);">
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 4rem; max-width: 1200px; margin: 0 auto;">
 <div class="feedback-col">
 <h2 style="margin-bottom: 0.5rem;">Share Your Experience</h2>
 <form id="review-form">
-<label style="display:block; margin-bottom: 0.5rem; font-weight:600; font-size: 14px;">Your Name / Enterprise</label>
+<label style="display:block; margin-bottom: 0.5rem; font-weight:600; font-size: 14px;">Your Name/Enterprise</label>
 <input type="text" id="review-name" class="search-input" style="width: 100%; margin-bottom: 1.5rem; border-radius: 8px;" placeholder="e.g. Acme Logistics Corp" required>
 <label style="display:block; margin-bottom: 0.5rem; font-weight:600; font-size: 14px;">Service Dispatch Rating</label>
 <select id="review-rating" class="filter-select" style="width: 100%; margin-bottom: 1.5rem; border-radius: 8px;" required>
@@ -242,7 +223,6 @@ Trusted Global Supply Chain &nbsp;&bull;&nbsp; we love you for life &nbsp;&bull;
 </div>
 </div>
 </section>
-
 <footer class="site-footer">
 <div class="footer-grid">
 <div class="footer-col">
@@ -278,7 +258,6 @@ Trusted Global Supply Chain &nbsp;&bull;&nbsp; we love you for life &nbsp;&bull;
 </div>
 <div class="footer-bottom">&copy; 2026 Mwamini complex services & Trading Portal Corporation. All Rights Reserved. we love you for life.</div>
 </footer>
-
 <script src="supabase-config.js"></script>
 <script>
 let localProductsCache = [];
@@ -287,451 +266,546 @@ let currentUserProfile = null;
 const exchangeRates = { USD: 1, RWF: 1290, RUB: 91.5, CNY: 215.72};
 
 document.addEventListener("DOMContentLoaded", async () => {
-initializePublicCatalog();
-setupSearchFilters();
-initializeOrderFulfillmentEngine();
-initializeFeedbackEngine();
-fetchAnnouncements();
-fetchSystemSettings(); 
-await checkUserSession();
-
-const root = document.documentElement;
-document.getElementById('theme-toggle').addEventListener('click', () => {
-const currentTheme = root.getAttribute('data-theme');
-const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
-root.setAttribute('data-theme', nextTheme);
-});
+    initializePublicCatalog();
+    setupSearchFilters();
+    initializeOrderFulfillmentEngine();
+    initializeFeedbackEngine();
+    fetchAnnouncements();
+    fetchSystemSettings(); 
+    await checkUserSession();
+    
+    const root = document.documentElement;
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+        const currentTheme = root.getAttribute('data-theme');
+        const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', nextTheme);
+    });
 });
 
 async function fetchSystemSettings() {
-if(!window.supabase) return;
-const { data } = await window.supabase.from('system_settings').select('*').eq('setting_key', 'displayed_online_users').single();
-if (data && data.setting_value > 0) {
-document.getElementById('live-users-count').innerText = data.setting_value;
-document.getElementById('live-users-container').style.display = 'inline-flex';
-}
+    if(!window.supabase) return;
+    try {
+        const { data, error } = await window.supabase.from('system_settings').select('*').eq('setting_key', 'displayed_online_users').single();
+        if (data && data.setting_value > 0) {
+            document.getElementById('live-users-count').innerText = data.setting_value;
+            document.getElementById('live-users-container').style.display = 'inline-flex';
+        }
+    } catch(err) {
+        console.warn("Telemetry fetch failed:", err);
+    }
 }
 
 async function checkUserSession() {
-if(!window.supabase) return;
-const { data: { session } } = await window.supabase.auth.getSession();
-if (session) {
-currentUser = session.user;
-await loadUserProfile();
-} else {
-showGuestNav();
-}
+    if(!window.supabase) return;
+    try {
+        const { data: { session }, error } = await window.supabase.auth.getSession();
+        if (error) throw error;
+        if (session) {
+            currentUser = session.user;
+            await loadUserProfile();
+        } else {
+            showGuestNav();
+        }
+    } catch (error) {
+        console.error("Session sync failed:", error);
+        showGuestNav();
+    }
 }
 
 async function loadUserProfile() {
-const { data, error } = await window.supabase.from('profiles').select('*').eq('id', currentUser.id).single();
-if (data) {
-currentUserProfile = data;
-if (!data.avatar_url) {
-document.getElementById('profile-completion-modal').classList.add('active');
-} else {
-showUserNav(data.full_name || currentUser.email);
-}
-}
+    if(!currentUser) return;
+    try {
+        const { data, error } = await window.supabase.from('profiles').select('*').eq('id', currentUser.id).single();
+        if (data) {
+            currentUserProfile = data;
+            if (!data.avatar_url) {
+                document.getElementById('profile-completion-modal').classList.add('active');
+            } else {
+                showUserNav(data.full_name || currentUser.email);
+            }
+        } else {
+            // Profile does not exist yet (backend trigger failed or missing)
+            showUserNav(currentUser.email);
+        }
+    } catch(err) {
+        console.error("Profile load failed:", err);
+        showUserNav(currentUser.email);
+    }
 }
 
 function showGuestNav() {
-document.getElementById('guest-nav').style.display = 'flex';
-document.getElementById('user-nav').style.display = 'none';
+    document.getElementById('guest-nav').style.display = 'flex';
+    document.getElementById('user-nav').style.display = 'none';
 }
 
 function showUserNav(name) {
-document.getElementById('guest-nav').style.display = 'none';
-document.getElementById('user-nav').style.display = 'flex';
-document.getElementById('auth-user-name').innerText = name;
+    document.getElementById('guest-nav').style.display = 'none';
+    document.getElementById('user-nav').style.display = 'flex';
+    document.getElementById('auth-user-name').innerText = name;
 }
 
 function openAuthModal(mode) {
-document.getElementById('auth-mode').value = mode;
-document.getElementById('auth-title').innerText = mode === 'login' ? 'Sign In' : 'Register';
-document.getElementById('register-fields').style.display = mode === 'register' ? 'block' : 'none';
-document.getElementById('auth-submit-btn').innerText = mode === 'login' ? 'Sign In' : 'Register';
-document.getElementById('auth-modal').classList.add('active');
+    document.getElementById('auth-mode').value = mode;
+    document.getElementById('auth-title').innerText = mode === 'login' ? 'Sign In' : 'Register';
+    document.getElementById('register-fields').style.display = mode === 'register' ? 'block' : 'none';
+    document.getElementById('auth-submit-btn').innerText = mode === 'login' ? 'Sign In' : 'Register';
+    document.getElementById('auth-modal').classList.add('active');
 }
 
-function closeAuthModal() { document.getElementById('auth-modal').classList.remove('active'); }
-function toggleAuthMode() { const current = document.getElementById('auth-mode').value; openAuthModal(current === 'login' ? 'register' : 'login'); }
-function validatePhone(phone) { const phoneRegex = /^\+250\d{9}$/; return phoneRegex.test(phone); }
+function closeAuthModal() { 
+    document.getElementById('auth-modal').classList.remove('active');
+}
+
+function toggleAuthMode() { 
+    const current = document.getElementById('auth-mode').value; 
+    openAuthModal(current === 'login' ? 'register' : 'login');
+}
+
+function validatePhone(phone) { 
+    const phoneRegex = /^\+250\d{9}$/; 
+    return phoneRegex.test(phone);
+}
 
 document.getElementById('auth-form').addEventListener('submit', async (e) => {
-e.preventDefault();
-const mode = document.getElementById('auth-mode').value;
-const email = document.getElementById('auth-email').value.trim();
-const password = document.getElementById('auth-password').value;
-const btn = document.getElementById('auth-submit-btn');
-btn.disabled = true;
-
-try {
-if (mode === 'register') {
-const phone = document.getElementById('reg-phone').value.trim();
-if(!validatePhone(phone)) {
-document.getElementById('phone-error').innerText = "Format: +250 followed by 9 digits.";
-throw new Error("Invalid phone number format.");
-}
-document.getElementById('phone-error').innerText = "";
-const { data, error } = await window.supabase.auth.signUp({ email, password, options: { emailRedirectTo: window.location.origin } });
-if (error) throw error;
-if(data.user) {
-await window.supabase.from('profiles').update({
-full_name: document.getElementById('reg-name').value.trim(),
-phone: phone,
-location: document.getElementById('reg-location').value.trim(),
-delivery_destination: document.getElementById('reg-dest').value.trim()
-}).eq('id', data.user.id);
-}
-showToast("Registration successful! Please check your email to verify.");
-closeAuthModal();
-} else {
-const { error } = await window.supabase.auth.signInWithPassword({ email, password });
-if (error) throw error;
-closeAuthModal();
-await checkUserSession();
-showToast("Logged in successfully.");
-}
-} catch (error) { alert(error.message); } finally { btn.disabled = false; }
+    e.preventDefault();
+    const mode = document.getElementById('auth-mode').value;
+    const email = document.getElementById('auth-email').value.trim();
+    const password = document.getElementById('auth-password').value;
+    const btn = document.getElementById('auth-submit-btn');
+    btn.disabled = true;
+    
+    try {
+        if (mode === 'register') {
+            const phone = document.getElementById('reg-phone').value.trim();
+            if(!validatePhone(phone)) {
+                document.getElementById('phone-error').innerText = "Format: +250 followed by 9 digits.";
+                throw new Error("Invalid phone number format.");
+            }
+            document.getElementById('phone-error').innerText = "";
+            const { data, error } = await window.supabase.auth.signUp({ email, password, options: { emailRedirectTo: window.location.origin } });
+            if (error) throw error;
+            
+            if(data.user) {
+                // Execute upsert to prevent RLS failure if record is missing, but catch silently if RLS rejects unverified users.
+                try {
+                    await window.supabase.from('profiles').upsert({
+                        id: data.user.id,
+                        full_name: document.getElementById('reg-name').value.trim(),
+                        phone: phone,
+                        location: document.getElementById('reg-location').value.trim(),
+                        delivery_destination: document.getElementById('reg-dest').value.trim(),
+                        email: email
+                    });
+                } catch(profileErr) {
+                    console.warn("Client profile initialization blocked by RLS. Relying on Backend Trigger.", profileErr);
+                }
+            }
+            showToast("Registration successful! Please check your email to verify.");
+            closeAuthModal();
+        } else {
+            const { error } = await window.supabase.auth.signInWithPassword({ email, password });
+            if (error) throw error;
+            closeAuthModal();
+            await checkUserSession();
+            showToast("Logged in successfully.");
+        }
+    } catch (error) { 
+        alert(error.message); 
+    } finally { 
+        btn.disabled = false; 
+    }
 });
 
 async function logoutUser() {
-await window.supabase.auth.signOut();
-currentUser = null;
-currentUserProfile = null;
-showGuestNav();
-showToast("Logged out.");
+    await window.supabase.auth.signOut();
+    currentUser = null;
+    currentUserProfile = null;
+    showGuestNav();
+    showToast("Logged out.");
 }
 
 async function handleProfileUpload(fileInput) {
-if (fileInput.files.length === 0) return null;
-const file = fileInput.files[0];
-const fileExt = file.name.split('.').pop();
-const filePath = `${currentUser.id}-${Math.random()}.${fileExt}`;
-const { error: uploadError } = await window.supabase.storage.from('avatars').upload(filePath, file);
-if (uploadError) throw uploadError;
-const { data: publicUrlData } = window.supabase.storage.from('avatars').getPublicUrl(filePath);
-const { error: updateError } = await window.supabase.from('profiles').update({ avatar_url: publicUrlData.publicUrl }).eq('id', currentUser.id);
-if (updateError) throw updateError;
-return publicUrlData.publicUrl;
+    if (fileInput.files.length === 0) return null;
+    const file = fileInput.files[0];
+    const fileExt = file.name.split('.').pop();
+    const filePath = `${currentUser.id}-${Math.random()}.${fileExt}`;
+    const { error: uploadError } = await window.supabase.storage.from('avatars').upload(filePath, file);
+    if (uploadError) throw uploadError;
+    const { data: publicUrlData } = window.supabase.storage.from('avatars').getPublicUrl(filePath);
+    const { error: updateError } = await window.supabase.from('profiles').upsert({ id: currentUser.id, avatar_url: publicUrlData.publicUrl });
+    if (updateError) throw updateError;
+    return publicUrlData.publicUrl;
 }
 
 document.getElementById('profile-completion-form').addEventListener('submit', async (e) => {
-e.preventDefault();
-try {
-await handleProfileUpload(document.getElementById('avatar-upload'));
-document.getElementById('profile-completion-modal').classList.remove('active');
-await loadUserProfile();
-showToast("Profile completed successfully.");
-} catch(err) { alert("Error uploading avatar: " + err.message); }
+    e.preventDefault();
+    try {
+        await handleProfileUpload(document.getElementById('avatar-upload'));
+        document.getElementById('profile-completion-modal').classList.remove('active');
+        await loadUserProfile();
+        showToast("Profile completed successfully.");
+    } catch(err) { 
+        alert("Error uploading avatar: " + err.message); 
+    }
 });
 
 document.getElementById('dash-avatar-update-form').addEventListener('submit', async (e) => {
-e.preventDefault();
-const btn = e.target.querySelector('button');
-btn.innerText = "Uploading..."; btn.disabled = true;
-try {
-const newUrl = await handleProfileUpload(document.getElementById('dash-avatar-upload'));
-if(newUrl) {
-document.getElementById('dash-avatar').src = newUrl;
-await loadUserProfile();
-showToast("Avatar Updated Successfully.");
-}
-} catch(err) { alert("Update failed: " + err.message); } finally {
-btn.innerText = "Update Avatar"; btn.disabled = false; e.target.reset();
-}
+    e.preventDefault();
+    const btn = e.target.querySelector('button');
+    btn.innerText = "Uploading..."; btn.disabled = true;
+    try {
+        const newUrl = await handleProfileUpload(document.getElementById('dash-avatar-upload'));
+        if(newUrl) {
+            document.getElementById('dash-avatar').src = newUrl;
+            await loadUserProfile();
+            showToast("Avatar Updated Successfully.");
+        }
+    } catch(err) { 
+        alert("Update failed: " + err.message); 
+    } finally {
+        btn.innerText = "Update Avatar"; btn.disabled = false; e.target.reset();
+    }
 });
 
 async function openUserDashboard() {
-if(!currentUserProfile) return;
-document.getElementById('dash-name').innerText = currentUserProfile.full_name || 'N/A';
-document.getElementById('dash-email').innerText = currentUserProfile.email || 'N/A';
-document.getElementById('dash-phone').innerText = currentUserProfile.phone || 'N/A';
-document.getElementById('dash-dest').innerText = currentUserProfile.delivery_destination || 'N/A';
-document.getElementById('dash-avatar').src = currentUserProfile.avatar_url || 'https://via.placeholder.com/80';
-const tbody = document.getElementById('user-orders-body');
-tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Loading Order Logistics...</td></tr>';
-document.getElementById('user-dashboard-modal').classList.add('active');
-
-const { data: orders } = await window.supabase.from('orders').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
-tbody.innerHTML = '';
-if(orders && orders.length > 0) {
-orders.forEach(o => {
-const date = new Date(o.created_at).toLocaleDateString();
-let statusColor = '#64748b'; 
-if(o.status === 'Processing') statusColor = 'var(--warning)';
-if(o.status === 'Shipped') statusColor = 'var(--accent)';
-if(o.status === 'Delivered') statusColor = 'var(--success)';
-tbody.innerHTML += `<tr>
-<td style="font-family:monospace; font-size:12px;">#${o.id.substring(0,8).toUpperCase()}</td>
-<td style="font-weight:600;">${escapeHTML(o.product_title)}</td>
-<td>${o.quantity}</td>
-<td>${date}</td>
-<td><span class="badge" style="background:${statusColor}; color:white;">${o.status}</span></td>
-</tr>`;
-});
-} else {
-tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:1.5rem;">No active or past orders found in your portfolio.</td></tr>`;
+    if(!currentUserProfile && !currentUser) return;
+    document.getElementById('dash-name').innerText = currentUserProfile?.full_name || currentUser?.email || 'N/A';
+    document.getElementById('dash-email').innerText = currentUserProfile?.email || currentUser?.email || 'N/A';
+    document.getElementById('dash-phone').innerText = currentUserProfile?.phone || 'N/A';
+    document.getElementById('dash-dest').innerText = currentUserProfile?.delivery_destination || 'N/A';
+    document.getElementById('dash-avatar').src = currentUserProfile?.avatar_url || 'https://via.placeholder.com/80';
+    
+    const tbody = document.getElementById('user-orders-body');
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Loading Order Logistics...</td></tr>';
+    document.getElementById('user-dashboard-modal').classList.add('active');
+    
+    try {
+        const { data: orders, error } = await window.supabase.from('orders').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
+        if(error) throw error;
+        tbody.innerHTML = '';
+        if(orders && orders.length > 0) {
+            orders.forEach(o => {
+                const date = new Date(o.created_at).toLocaleDateString();
+                let statusColor = '#64748b'; 
+                if(o.status === 'Processing') statusColor = 'var(--warning)';
+                if(o.status === 'Shipped') statusColor = 'var(--accent)';
+                if(o.status === 'Delivered') statusColor = 'var(--success)';
+                tbody.innerHTML += `<tr>
+                <td style="font-family:monospace; font-size:12px;">#${o.id.substring(0,8).toUpperCase()}</td>
+                <td style="font-weight:600;">${escapeHTML(o.product_title)}</td>
+                <td>${o.quantity}</td>
+                <td>${date}</td>
+                <td><span class="badge" style="background:${statusColor}; color:white;">${escapeHTML(o.status)}</span></td>
+                </tr>`;
+            });
+        } else {
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:1.5rem;">No active or past orders found in your portfolio.</td></tr>`;
+        }
+    } catch(err) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:1.5rem; color:var(--danger);">Error synchronizing pipeline.</td></tr>`;
+    }
 }
-}
 
-function closeUserDashboard() { document.getElementById('user-dashboard-modal').classList.remove('active'); }
+function closeUserDashboard() { 
+    document.getElementById('user-dashboard-modal').classList.remove('active'); 
+}
 
 async function fetchAnnouncements() {
-try {
-const { data, error } = await window.supabase.from('announcements').select('*').eq('active', true).order('created_at', { ascending: false });
-if (error) throw error;
-const banner = document.getElementById('dynamic-announcement');
-const feedContainer = document.getElementById('public-announcements-container');
-const feedSection = document.getElementById('public-announcements-feed');
-
-if (!data || data.length === 0) {
-banner.classList.remove('active');
-feedSection.style.display = 'none';
-return;
-}
-banner.innerText = data[0].content;
-banner.classList.add('active');
-feedSection.style.display = 'block'; 
-feedContainer.innerHTML = '';
-
-data.forEach(a => {
-const imgBlock = a.image_url ? `<img src="${a.image_url}" alt="Announcement Graphic" style="width: 150px; height: 150px; object-fit: cover; border-radius: 8px; flex-shrink: 0;">` : '';
-const dateStr = new Date(a.created_at).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
-const card = document.createElement('div');
-card.className = 'public-feed-card';
-card.innerHTML = `
-${imgBlock}
-<div style="flex-grow: 1;">
-<span style="font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase; margin-bottom:0.25rem; display:block;">${dateStr}</span>
-<p style="font-size:1rem; color:var(--text-main); line-height:1.7;">${escapeHTML(a.content)}</p>
-</div>`;
-feedContainer.appendChild(card);
-});
-} catch (err) { console.error("Supabase Announcements Blocked/Error:", err.message); }
+    try {
+        const { data, error } = await window.supabase.from('announcements').select('*').eq('active', true).order('created_at', { ascending: false });
+        if (error) throw error;
+        const banner = document.getElementById('dynamic-announcement');
+        const feedContainer = document.getElementById('public-announcements-container');
+        const feedSection = document.getElementById('public-announcements-feed');
+        
+        if (!data || data.length === 0) {
+            banner.classList.remove('active');
+            feedSection.style.display = 'none';
+            return;
+        }
+        banner.innerText = data[0].content;
+        banner.classList.add('active');
+        feedSection.style.display = 'block';
+        feedContainer.innerHTML = '';
+        
+        data.forEach(a => {
+            const imgBlock = a.image_url ? `<img src="${escapeHTML(a.image_url)}" alt="Announcement Graphic" style="width: 150px; height: 150px; object-fit: cover; border-radius: 8px; flex-shrink: 0;">` : '';
+            const dateStr = new Date(a.created_at).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+            const card = document.createElement('div');
+            card.className = 'public-feed-card';
+            card.innerHTML = `
+            ${imgBlock}
+            <div style="flex-grow: 1;">
+            <span style="font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase; margin-bottom:0.25rem; display:block;">${dateStr}</span>
+            <p style="font-size:1rem; color:var(--text-main); line-height:1.7;">${escapeHTML(a.content)}</p>
+            </div>`;
+            feedContainer.appendChild(card);
+        });
+    } catch (err) { 
+        console.warn("Supabase Announcements Sync Error:", err.message); 
+    }
 }
 
 window.viewDetails = (id) => {
-const prod = localProductsCache.find(p => p.id === id);
-if(prod) {
-document.getElementById('details-title').innerText = prod.title;
-document.getElementById('details-desc').innerText = prod.description.replace(/\[CURRENCY:\w+\]/g, "");
-document.getElementById('details-modal').classList.add('active');
-}
+    const prod = localProductsCache.find(p => p.id === id);
+    if(prod) {
+        document.getElementById('details-title').innerText = prod.title;
+        document.getElementById('details-desc').innerText = (prod.description || "").replace(/\[CURRENCY:\w+\]/g, "");
+        document.getElementById('details-modal').classList.add('active');
+    }
 };
+
 window.closeDetailsModal = () => document.getElementById('details-modal').classList.remove('active');
 
 async function likeProduct(title) {
-const { error } = await window.supabase.from('inquiries').insert([{
-name: currentUserProfile ? currentUserProfile.full_name : "Guest User", 
-category: "Product Interest", 
-subject: "Like",
-message: `User liked: ${title}`, 
-status: 'Pending'
-}]);
-alert(error ? "Like failed." : "Liked! Admin notified.");
+    const { error } = await window.supabase.from('inquiries').insert([{
+        name: currentUserProfile ? currentUserProfile.full_name : "Guest User", 
+        category: "Product Interest", 
+        subject: "Like",
+        message: `User liked: ${title}`, 
+        status: 'Pending'
+    }]);
+    alert(error ? "Like failed." : "Liked! Admin notified.");
 }
 
 function initializeFeedbackEngine() {
-document.getElementById("review-form").addEventListener("submit", async (e) => {
-e.preventDefault();
-const btn = e.target.querySelector('button[type="submit"]');
-btn.disabled = true; btn.innerText = "Transmitting...";
-try {
-const payload = {
-name: document.getElementById("review-name").value.trim(),
-rating: parseInt(document.getElementById("review-rating").value, 10),
-message: document.getElementById("review-message").value.trim()
-};
-const { error } = await window.supabase.from('reviews').insert([payload]);
-if (error) throw error;
-showToast("Review successfully.");
-e.target.reset();
-} catch (err) { alert(`Routing failed: ${err.message}`);
-} finally { btn.disabled = false; btn.innerText = "Submit Review"; }
-});
+    document.getElementById("review-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const btn = e.target.querySelector('button[type="submit"]');
+        btn.disabled = true; btn.innerText = "Transmitting...";
+        try {
+            const payload = {
+                name: document.getElementById("review-name").value.trim(),
+                rating: parseInt(document.getElementById("review-rating").value, 10),
+                message: document.getElementById("review-message").value.trim()
+            };
+            const { error } = await window.supabase.from('reviews').insert([payload]);
+            if (error) throw error;
+            showToast("Review submitted successfully.");
+            e.target.reset();
+        } catch (err) { 
+            alert(`Routing failed: ${err.message}`);
+        } finally { 
+            btn.disabled = false; btn.innerText = "Submit Platform Review"; 
+        }
+    });
 
-document.getElementById("inquiry-form").addEventListener("submit", async (e) => {
-e.preventDefault();
-const btn = e.target.querySelector('button[type="submit"]');
-btn.disabled = true; btn.innerText = "Transmitting...";
-try {
-const payload = {
-name: currentUserProfile ? currentUserProfile.full_name : "Platform Guest User",
-category: "Support Ticket",
-subject: document.getElementById("inquiry-subject").value.trim(),
-message: document.getElementById("inquiry-message").value.trim(),
-status: 'Pending'
-};
-const { error } = await window.supabase.from('inquiries').insert([payload]);
-if (error) throw error;
-showToast("Ticket securely routed.");
-e.target.reset();
-} catch (err) { alert(`Routing failed: ${err.message}`);
-} finally { btn.disabled = false; btn.innerText = "Transmit Ticket to Helpdesk"; }
-});
+    document.getElementById("inquiry-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const btn = e.target.querySelector('button[type="submit"]');
+        btn.disabled = true; btn.innerText = "Transmitting...";
+        try {
+            const payload = {
+                name: currentUserProfile ? currentUserProfile.full_name : "Platform Guest User",
+                category: "Support Ticket",
+                subject: document.getElementById("inquiry-subject").value.trim(),
+                message: document.getElementById("inquiry-message").value.trim(),
+                status: 'Pending'
+            };
+            const { error } = await window.supabase.from('inquiries').insert([payload]);
+            if (error) throw error;
+            showToast("Ticket securely routed.");
+            e.target.reset();
+        } catch (err) { 
+            alert(`Routing failed: ${err.message}`);
+        } finally { 
+            btn.disabled = false; btn.innerText = "Transmit Ticket to Helpdesk"; 
+        }
+    });
 }
 
-function openVerificationModal() { document.getElementById('verification-modal').classList.add('active'); }
+function openVerificationModal() { 
+    document.getElementById('verification-modal').classList.add('active'); 
+}
+
 function closeVerificationModal() { 
-document.getElementById('verification-modal').classList.remove('active'); 
-document.getElementById('verification-pin').value = '';
-document.getElementById('verification-error').innerText = '';
+    document.getElementById('verification-modal').classList.remove('active'); 
+    document.getElementById('verification-pin').value = '';
+    document.getElementById('verification-error').innerText = '';
 }
+
 function verifyAdminAccess() {
-const input = document.getElementById('verification-pin');
-const errorText = document.getElementById('verification-error');
-if(input.value === 'Password@4321') {
-window.location.href = 'admin.html';
-} else { errorText.innerText = "Invalid security pin. Access denied."; }
+    const input = document.getElementById('verification-pin');
+    const errorText = document.getElementById('verification-error');
+    if(input.value === 'Password@4321') {
+        window.location.href = 'admin.html';
+    } else { 
+        errorText.innerText = "Invalid security pin. Access denied."; 
+    }
 }
 
 async function initializePublicCatalog() {
-const container = document.getElementById("products-container");
-if (!window.supabase) return;
-const { data, error } = await window.supabase.from('products').select('*').order('created_at', { ascending: false });
-if (error) { 
-container.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color: var(--danger);">Sync Error: ${error.message}</p>`; 
-return;
-}
-localProductsCache = data || [];
-renderCatalogGrid(localProductsCache);
-initializeRealtimeCatalogUpdates();
+    const container = document.getElementById("products-container");
+    if (!window.supabase) return;
+    try {
+        const { data, error } = await window.supabase.from('products').select('*').order('created_at', { ascending: false });
+        if (error) throw error;
+        localProductsCache = data || [];
+        renderCatalogGrid(localProductsCache);
+        initializeRealtimeCatalogUpdates();
+    } catch(err) {
+        container.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color: var(--danger);">Sync Error: ${err.message}</p>`; 
+    }
 }
 
 function renderCatalogGrid(productsList) {
-const container = document.getElementById("products-container");
-const targetCurrency = document.getElementById("currency-select").value;
-container.innerHTML = "";
-productsList.forEach(item => {
-const sourceCurrency = item.description?.includes("[CURRENCY:RWF]") ? "RWF" : (item.description?.includes("[CURRENCY:RUB]") ? "RUB" : "USD");
-const priceVal = (item.price / exchangeRates[sourceCurrency]) * exchangeRates[targetCurrency];
-const currencySymbol = targetCurrency === "USD" ? "$" : (targetCurrency === "RWF" ? "RWF " : "₽");
-const isOutOfStock = item.quantity <= 0;
-const isLowStock = item.quantity > 0 && item.quantity <= 3;
-const finalMediaUrl = item.image_url ? (item.image_url.startsWith('http') ? item.image_url : window.supabase.storage.from('product-assets').getPublicUrl(item.image_url).data.publicUrl) : "https://via.placeholder.com/400x300?text=No+Asset";
+    const container = document.getElementById("products-container");
+    const targetCurrency = document.getElementById("currency-select").value;
+    container.innerHTML = "";
+    
+    if(productsList.length === 0) {
+        container.innerHTML = `<p style="grid-column: 1/-1; text-align:center;">No commodities mapped to current parameters.</p>`;
+        return;
+    }
+    
+    const fragment = document.createDocumentFragment();
+    
+    productsList.forEach(item => {
+        const sourceCurrency = item.description?.includes("[CURRENCY:RWF]") ? "RWF" : (item.description?.includes("[CURRENCY:RUB]") ? "RUB" : "USD");
+        const priceVal = (item.price / exchangeRates[sourceCurrency]) * exchangeRates[targetCurrency];
+        const currencySymbol = targetCurrency === "USD" ? "$" : (targetCurrency === "RWF" ? "RWF " : "₽");
+        const isOutOfStock = item.quantity <= 0;
+        const isLowStock = item.quantity > 0 && item.quantity <= 3;
+        
+        let finalMediaUrl = "https://via.placeholder.com/400x300?text=No+Asset";
+        if (item.image_url) {
+            finalMediaUrl = item.image_url.startsWith('http') ? item.image_url : window.supabase.storage.from('product-assets').getPublicUrl(item.image_url).data.publicUrl;
+        }
 
-let badgeHTML = '';
-if (isOutOfStock) { badgeHTML = '<span class="stock-badge bg-danger">Out of Stock</span>'; } 
-else if (isLowStock) { badgeHTML = '<span class="stock-badge bg-warning">Limited Stock</span>'; }
-
-const cardNode = document.createElement("div");
-cardNode.className = `product-card`;
-cardNode.innerHTML = `
-${badgeHTML}
-<div style="position: relative; height: 150px; background: #f1f5f9;">
-<img src="${finalMediaUrl}" style="width:100%; height:100%; object-fit:cover;" onerror="this.src='https://via.placeholder.com/400x300?text=Asset+Link+Error'">
-</div>
-<div style="padding: 0.75rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;">
-<div>
-<h4 style="font-size: 14px; margin: 0 0 0.25rem 0; color: var(--text-main); font-weight: 600;">
-${item.title} <span class="verified-badge" style="color:var(--success);">✔</span>
-</h4>
-</div>
-<div style="margin: 0.5rem 0;">
-<button class="btn" style="font-size:10px; margin-right:4px; padding: 4px 8px;" onclick="viewDetails('${item.id}')">Details</button>
-<button class="btn" style="font-size:10px; padding: 4px 8px; background:var(--danger); color:white;" onclick="likeProduct('${item.title.replace(/'/g, "\\'")}')">❤</button>
-</div>
-<div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 0.5rem;">
-<span style="font-size: 14px; font-weight: 700; color: var(--success);">${currencySymbol}${new Intl.NumberFormat('en-US').format(Math.round(priceVal))}</span>
-<button class="btn btn-primary" style="padding: 0.25rem 0.5rem; font-size: 11px;" ${isOutOfStock ? 'disabled' : ''} onclick="openOrderModal('${item.id}', '${item.title.replace(/'/g, "\\'")}')">Order</button>
-</div>
-</div>`;
-container.appendChild(cardNode);
-});
+        let badgeHTML = '';
+        if (isOutOfStock) { 
+            badgeHTML = '<span class="stock-badge bg-danger">Out of Stock</span>';
+        } else if (isLowStock) { 
+            badgeHTML = '<span class="stock-badge bg-warning">Limited Stock</span>'; 
+        }
+        
+        const cardNode = document.createElement("div");
+        cardNode.className = `product-card`;
+        cardNode.innerHTML = `
+        ${badgeHTML}
+        <div style="position: relative; height: 150px; background: #f1f5f9;">
+        <img src="${escapeHTML(finalMediaUrl)}" style="width:100%; height:100%; object-fit:cover;" onerror="this.src='https://via.placeholder.com/400x300?text=Asset+Link+Error'">
+        </div>
+        <div style="padding: 0.75rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+        <h4 style="font-size: 14px; margin: 0 0 0.25rem 0; color: var(--text-main); font-weight: 600;">
+        ${escapeHTML(item.title)} <span class="verified-badge" style="color:var(--success);">✔</span>
+        </h4>
+        </div>
+        <div style="margin: 0.5rem 0;">
+        <button class="btn" style="font-size:10px; margin-right:4px; padding: 4px 8px;" onclick="viewDetails('${item.id}')">Details</button>
+        <button class="btn" style="font-size:10px; padding: 4px 8px; background:var(--danger); color:white;" onclick="likeProduct('${escapeHTML(item.title).replace(/'/g, "\\'")}')">❤</button>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 0.5rem;">
+        <span style="font-size: 14px; font-weight: 700; color: var(--success);">${currencySymbol}${new Intl.NumberFormat('en-US').format(Math.round(priceVal))}</span>
+        <button class="btn btn-primary" style="padding: 0.25rem 0.5rem; font-size: 11px;" ${isOutOfStock ? 'disabled' : ''} onclick="openOrderModal('${item.id}', '${escapeHTML(item.title).replace(/'/g, "\\'")}')">Order</button>
+        </div>
+        </div>`;
+        fragment.appendChild(cardNode);
+    });
+    container.appendChild(fragment);
 }
 
 window.openOrderModal = (id, title) => {
-document.getElementById('form-product-id').value = id;
-document.getElementById('form-product-title-val').value = title;
-document.getElementById('modal-product-title').innerText = `Request Allocation: ${title}`;
-if(currentUserProfile) {
-document.getElementById('cust-name').value = currentUserProfile.full_name || '';
-document.getElementById('cust-phone').value = currentUserProfile.phone || '';
-document.getElementById('cust-location').value = currentUserProfile.delivery_destination || '';
-}
-document.getElementById('order-modal').classList.add('active');
+    document.getElementById('form-product-id').value = id;
+    document.getElementById('form-product-title-val').value = title;
+    document.getElementById('modal-product-title').innerText = `Request Allocation: ${title}`;
+    if(currentUserProfile) {
+        document.getElementById('cust-name').value = currentUserProfile.full_name || '';
+        document.getElementById('cust-phone').value = currentUserProfile.phone || '';
+        document.getElementById('cust-location').value = currentUserProfile.delivery_destination || '';
+    }
+    document.getElementById('order-modal').classList.add('active');
 };
 
 window.closeOrderModal = () => document.getElementById('order-modal').classList.remove('active');
 
 function initializeOrderFulfillmentEngine() {
-document.getElementById("order-submission-form").addEventListener("submit", async (e) => {
-e.preventDefault();
-const btn = document.getElementById("submit-order-btn");
-btn.disabled = true;
-const productId = document.getElementById("form-product-id").value;
-const requestedQty = parseInt(document.getElementById("cust-qty").value, 10);
-const targetedProduct = localProductsCache.find(p => p.id === productId);
-
-if (!targetedProduct || targetedProduct.quantity < requestedQty) {
-alert(`Fulfillment Error: Insufficient stock. Only ${targetedProduct?.quantity || 0} units remain.`);
-btn.disabled = false;
-return;
-}
-const payload = {
-product_id: productId,
-product_title: document.getElementById("form-product-title-val").value,
-customer_name: document.getElementById("cust-name").value.trim(),
-customer_phone: document.getElementById("cust-phone").value.trim(),
-quantity: requestedQty,
-location: document.getElementById("cust-location").value.trim(),
-notes: document.getElementById("cust-notes").value.trim(),
-status: 'Pending',
-user_id: currentUser ? currentUser.id : null
-};
-const { error } = await window.supabase.from('orders').insert([payload]);
-if (error) { alert(`Routing failed: ${error.message}`); btn.disabled = false; return; }
-
-const updatedQty = targetedProduct.quantity - requestedQty;
-await window.supabase.from('products').update({ quantity: updatedQty }).eq('id', productId);
-
-showToast("Transaction Processed Successfully!");
-closeOrderModal();
-e.target.reset();
-btn.disabled = false;
-});
+    document.getElementById("order-submission-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById("submit-order-btn");
+        btn.disabled = true;
+        const productId = document.getElementById("form-product-id").value;
+        const requestedQty = parseInt(document.getElementById("cust-qty").value, 10);
+        const targetedProduct = localProductsCache.find(p => p.id === productId);
+        
+        if (!targetedProduct || targetedProduct.quantity < requestedQty) {
+            alert(`Fulfillment Error: Insufficient stock. Only ${targetedProduct?.quantity || 0} units remain.`);
+            btn.disabled = false;
+            return;
+        }
+        
+        const payload = {
+            product_id: productId,
+            product_title: document.getElementById("form-product-title-val").value,
+            customer_name: document.getElementById("cust-name").value.trim(),
+            customer_phone: document.getElementById("cust-phone").value.trim(),
+            quantity: requestedQty,
+            location: document.getElementById("cust-location").value.trim(),
+            notes: document.getElementById("cust-notes").value.trim(),
+            status: 'Pending',
+            user_id: currentUser ? currentUser.id : null
+        };
+        
+        try {
+            const { error } = await window.supabase.from('orders').insert([payload]);
+            if (error) throw error;
+            const updatedQty = targetedProduct.quantity - requestedQty;
+            await window.supabase.from('products').update({ quantity: updatedQty }).eq('id', productId);
+            
+            showToast("Transaction Processed Successfully!");
+            closeOrderModal();
+            e.target.reset();
+        } catch(err) {
+            alert(`Routing failed: ${err.message}`);
+        } finally {
+            btn.disabled = false;
+        }
+    });
 }
 
 function showToast(msg) {
-const toast = document.getElementById("global-toast");
-toast.innerText = msg; toast.classList.add("show");
-setTimeout(() => toast.classList.remove("show"), 3000);
+    const toast = document.getElementById("global-toast");
+    toast.innerText = msg; toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 3000);
 }
 
 function setupSearchFilters() {
-const trigger = () => {
-const searchVal = document.getElementById("search-input").value.toLowerCase().trim();
-const categoryVal = document.getElementById("category-filter").value;
-const filtered = localProductsCache.filter(p => {
-const matchQuery = p.title.toLowerCase().includes(searchVal) || p.description?.toLowerCase().includes(searchVal);
-return (categoryVal === "All" || p.category === categoryVal) && matchQuery;
-});
-renderCatalogGrid(filtered);
-};
-document.getElementById("search-input").addEventListener("input", trigger);
-document.getElementById("category-filter").addEventListener("change", trigger);
-document.getElementById("currency-select").addEventListener("change", () => renderCatalogGrid(localProductsCache));
+    const trigger = () => {
+        const searchVal = document.getElementById("search-input").value.toLowerCase().trim();
+        const categoryVal = document.getElementById("category-filter").value;
+        const filtered = localProductsCache.filter(p => {
+            const matchQuery = p.title.toLowerCase().includes(searchVal) || (p.description || "").toLowerCase().includes(searchVal);
+            return (categoryVal === "All" || p.category === categoryVal) && matchQuery;
+        });
+        renderCatalogGrid(filtered);
+    };
+    document.getElementById("search-input").addEventListener("input", trigger);
+    document.getElementById("category-filter").addEventListener("change", trigger);
+    document.getElementById("currency-select").addEventListener("change", () => renderCatalogGrid(localProductsCache));
 }
 
 function initializeRealtimeCatalogUpdates() {
-window.supabase.channel('public-products-channel').on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, async () => {
-const { data } = await window.supabase.from('products').select('*').order('created_at', { ascending: false });
-if (data) {
-localProductsCache = data;
-document.getElementById("search-input").dispatchEvent(new Event("input"));
-}
-}).subscribe();
-window.supabase.channel('public-announcements-channel').on('postgres_changes', { event: '*', schema: 'public', table: 'announcements' }, () => {
-fetchAnnouncements();
-}).subscribe();
+    window.supabase.channel('public-products-channel').on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, async () => {
+        try {
+            const { data, error } = await window.supabase.from('products').select('*').order('created_at', { ascending: false });
+            if (!error && data) {
+                localProductsCache = data;
+                document.getElementById("search-input").dispatchEvent(new Event("input"));
+            }
+        } catch(err) { console.warn("Realtime sync issue:", err); }
+    }).subscribe();
+
+    window.supabase.channel('public-announcements-channel').on('postgres_changes', { event: '*', schema: 'public', table: 'announcements' }, () => {
+        fetchAnnouncements();
+    }).subscribe();
 }
 
 function escapeHTML(str) {
-const div = document.createElement('div');
-div.textContent = str;
-return div.innerHTML;
+    if(!str) return "";
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
 }
 </script>
 </body>
