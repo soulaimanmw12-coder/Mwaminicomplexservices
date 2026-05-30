@@ -364,15 +364,15 @@ border-bottom: 1px solid var(--dash-border); flex-direction: row; overflow-x: au
 </head>
 <body>
 
-<header style="background: var(--glass-bg); backdrop-filter: blur(16px); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border);">
+<header style="background: var(--glass-bg); backdrop-filter: blur(16px);">
 <div style="display: flex; align-items: center; gap: 10px;">
 <img src="https://sdxtdkroyolagmjaipgw.supabase.co/storage/v1/object/public/product-assets/Company%20logo.jpg" alt="Mwamini Logo" style="height: 40px; border-radius: 4px; filter: invert(1);">
-<div class="brand-title" style="font-weight: 800;">MWAMINI TELEMETRY</div>
+<div class="brand-title">MWAMINI TELEMETRY</div>
 </div>
 <div style="display: flex; gap: 1.5rem; align-items: center;">
 <div class="live-users-badge">
 <div class="live-users-pulse"></div>
-<span style="font-size: 12px; font-weight: 700;">Session Active</span>
+<span>Session Active</span>
 </div>
 <button id="theme-toggle" class="btn" style="padding:0.5rem 1rem; background: var(--border-color); color: var(--text-main);">Theme</button>
 <button onclick="logoutMainframe()" class="btn" style="background: var(--danger); color: white; padding: 0.5rem 1rem;">Terminate Session</button>
@@ -450,7 +450,7 @@ Select an order from the tracking directory matrix to visualize telemetry trajec
 <div id="active-pipeline-display" style="display: none;">
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
 <div><strong>Tracking ID:</strong> <span id="pipeline-order-id" style="font-family: monospace;"></span></div>
-<div><span id="pipeline-product-title" class="badge" style="background: var(--dash-blue-light); color: var(--dash-blue-accent); font-size: 12px; padding: 6px 12px; border-radius: 12px;"></span></div>
+<div><span id="pipeline-product-title" class="badge" style="background: var(--dash-blue-light); color: var(--dash-blue-accent); font-size: 12px; padding: 6px 12px;"></span></div>
 </div>
 
 <div class="pipeline-tracker">
@@ -488,17 +488,16 @@ Select an order from the tracking directory matrix to visualize telemetry trajec
 </select>
 </div>
 </div>
-
 <div style="background: var(--dash-bg-card); border-radius: 16px; border: 1px solid var(--dash-border); overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);">
-<table class="dashboard-table" style="box-shadow: none; border-radius: 0; width: 100%; text-align: left;">
+<table class="dashboard-table" style="box-shadow: none; border-radius: 0;">
 <thead>
 <tr>
-<th style="padding: 1rem; border-bottom: 1px solid var(--dash-border);">Allocation Ref</th>
-<th style="padding: 1rem; border-bottom: 1px solid var(--dash-border);">Commodity</th>
-<th style="padding: 1rem; border-bottom: 1px solid var(--dash-border);">Metrics</th>
-<th style="padding: 1rem; border-bottom: 1px solid var(--dash-border);">Destination</th>
-<th style="padding: 1rem; border-bottom: 1px solid var(--dash-border);">Status</th>
-<th style="padding: 1rem; border-bottom: 1px solid var(--dash-border);">Action</th>
+<th>Allocation Reference Token</th>
+<th>Commodity payload</th>
+<th>Metrics</th>
+<th>Hub Destination</th>
+<th>Telemetry Pipeline Status</th>
+<th>Action Terminal</th>
 </tr>
 </thead>
 <tbody id="dashboard-orders-table-body">
@@ -526,13 +525,13 @@ Select an order from the tracking directory matrix to visualize telemetry trajec
 <form id="dash-comment-submit-form" onsubmit="submitDashComment(event)">
 <div style="margin-bottom: 1rem;">
 <label style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 0.5rem;">Corporate Signature Alias</label>
-<input type="text" id="dash-comment-author" class="search-input" style="width: 100%; font-size: 14px; padding: 0.75rem;" required placeholder="e.g. Lead Logistics Officer">
+<input type="text" id="dash-comment-author" class="search-input" style="width: 100%; font-size: 14px;" required placeholder="e.g. Lead Logistics Officer">
 </div>
 <div style="margin-bottom: 1.5rem;">
 <label style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 0.5rem;">Verbatim Payload</label>
-<textarea id="dash-comment-body" class="search-input" style="width: 100%; height: 110px; font-size: 14px; resize: none; padding: 0.75rem;" required placeholder="Type system-wide message broadcast payload..."></textarea>
+<textarea id="dash-comment-body" class="search-input" style="width: 100%; height: 110px; font-size: 14px; resize: none;" required placeholder="Type system-wide message broadcast payload..."></textarea>
 </div>
-<button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.85rem; border:none; border-radius: 8px;">Inject Payload into Data Field</button>
+<button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.85rem;">Inject Payload into Data Field</button>
 </form>
 </div>
 </div>
@@ -550,30 +549,30 @@ Select an order from the tracking directory matrix to visualize telemetry trajec
 <h3 style="margin-bottom: 1.5rem; color: var(--dash-blue-deep);">Profile Identity Settings</h3>
 <form id="dash-profile-settings-form" onsubmit="saveProfileMatrix(event)">
 <div style="text-align: center; margin-bottom: 1.5rem;">
-<img id="dash-settings-avatar-preview" class="user-avatar-preview" src="https://via.placeholder.com/80" alt="Avatar" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
+<img id="dash-settings-avatar-preview" class="user-avatar-preview" src="https://via.placeholder.com/80" alt="Avatar">
 <div style="font-size: 12px; color: var(--dash-muted); margin-top: 4px;">Dynamic verification identity photo</div>
 </div>
 <div class="form-grid-two-col">
 <div style="margin-bottom: 1rem;">
 <label style="display: block; font-size: 12px; font-weight: 700; margin-bottom: 0.25rem;">Full Legal Name</label>
-<input type="text" id="set-full-name" class="search-input" style="width: 100%; padding: 0.5rem;" required>
+<input type="text" id="set-full-name" class="search-input" style="width: 100%;" required>
 </div>
 <div style="margin-bottom: 1rem;">
 <label style="display: block; font-size: 12px; font-weight: 700; margin-bottom: 0.25rem;">Secure Phone Line</label>
-<input type="text" id="set-phone-number" class="search-input" style="width: 100%; padding: 0.5rem;" required>
+<input type="text" id="set-phone-number" class="search-input" style="width: 100%;" required>
 </div>
 </div>
 <div class="form-grid-two-col">
 <div style="margin-bottom: 1rem;">
 <label style="display: block; font-size: 12px; font-weight: 700; margin-bottom: 0.25rem;">Operational Location Base</label>
-<input type="text" id="set-location" class="search-input" style="width: 100%; padding: 0.5rem;">
+<input type="text" id="set-location" class="search-input" style="width: 100%;">
 </div>
 <div style="margin-bottom: 1rem;">
 <label style="display: block; font-size: 12px; font-weight: 700; margin-bottom: 0.25rem;">Destination Freight Hub</label>
-<input type="text" id="set-dest-hub" class="search-input" style="width: 100%; padding: 0.5rem;">
+<input type="text" id="set-dest-hub" class="search-input" style="width: 100%;">
 </div>
 </div>
-<button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; padding: 0.75rem; border:none; border-radius:8px;">Commit Identity Modifications</button>
+<button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; padding: 0.75rem;">Commit Identity Modifications</button>
 </form>
 </div>
 
@@ -581,9 +580,9 @@ Select an order from the tracking directory matrix to visualize telemetry trajec
 <h3 style="margin-bottom: 1.5rem; color: var(--dash-blue-deep);">Cryptographic Access Terminal</h3>
 <div style="margin-bottom: 1.25rem;">
 <label style="display: block; font-size: 12px; font-weight: 700; margin-bottom: 0.25rem;">Rotate Passphrase Key Token</label>
-<input type="password" id="set-new-password" class="search-input" style="width: 100%; padding: 0.5rem;" placeholder="Enter updated alpha-numeric hash key">
+<input type="password" id="set-new-password" class="search-input" style="width: 100%;" placeholder="Enter updated alpha-numeric hash key">
 </div>
-<button type="button" onclick="rotateSecurityToken()" class="btn" style="width: 100%; background: var(--dash-blue-light); color: var(--dash-blue-accent); font-weight: 700; border:none; padding: 0.75rem; border-radius: 8px;">Re-Authorize Security Key</button>
+<button type="button" onclick="rotateSecurityToken()" class="btn" style="width: 100%; background: var(--dash-blue-light); color: var(--dash-blue-accent); font-weight: 700;">Re-Authorize Security Key</button>
 </div>
 </div>
 
@@ -648,17 +647,18 @@ Select an order from the tracking directory matrix to visualize telemetry trajec
 </main>
 </div>
 
-<div id="dash-toast-system" class="toast-notification" style="position: fixed; bottom: 20px; right: 20px; background: white; padding: 1rem; border-left: 4px solid var(--dash-blue-accent); box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-radius: 4px; transform: translateY(150%); transition: transform 0.3s; z-index: 9999;">Payload operational alert event registered.</div>
+<div id="dash-toast-system" class="toast-notification">Payload operational alert event registered.</div>
 
-<script src="supabase-config.js"></script>
 <script>
+// System variables & cache mappings
 let currentSessionUser = null;
 let globalOrdersCache = [];
 let globalCommentsMock = [
-{ id: 1, author: "System Terminal Alpha", body: "Ecosystem synchronized. Ready for secure freight manifest operations.", reactions: { "👍": 4, "🔥": 2 } },
-{ id: 2, author: "Kigali Logistics Hub", body: "Container batch #94-G grains transit pipeline verified at port boundary.", reactions: { "👍": 5, "🚀": 3 } }
+{ id: 1, author: "System Terminal Alpha", body: "Ecosystem synchronized. Ready for secure freight manifest operations.", reactions: { "🔥": 4, "🚀": 2 } },
+{ id: 2, author: "Kigali Logistics Hub", body: "Container batch #94-G grains transit pipeline verified at port boundary.", reactions: { "✅": 5, "🤝": 3 } }
 ];
 
+// Canvas animation settings variables
 let canvas, ctx;
 let animateGarden = true;
 let gardenPulseFactor = 1.0;
@@ -667,7 +667,7 @@ let grassBlades = [];
 let butterflies = [];
 let ambientParticles = [];
 let cloudOffset = 0;
-
+// Audio System State Mappings (Web Audio API Synthesizer)
 let audioCtx = null;
 let soundIsPlaying = false;
 let ambientOscillator = null;
@@ -675,472 +675,586 @@ let ambientGainNode = null;
 let oscillatorIntervalId = null;
 
 document.addEventListener("DOMContentLoaded", async () => {
-    initializeThemeRouting();
-    setupInteractiveGardenCanvas();
-    renderSocialCommentStream();
-    
-    if (window.supabase) {
-        await synchronizeUserSessionState();
-    } else {
-        showDashToast("Warning: Core database system instance signal detached.", true);
-    }
+initializeThemeRouting();
+setupInteractiveGardenCanvas();
+renderSocialCommentStream();
+
+// Connect to live Supabase client instance exposed via global configuration scope
+if (window.supabase) {
+await synchronizeUserSessionState();
+} else {
+showDashToast("Warning: Core database system instance signal detached.", true);
+}
 });
 
 function initializeThemeRouting() {
-    const root = document.documentElement;
-    const themeBtn = document.getElementById('theme-toggle');
-    if(themeBtn) {
-        themeBtn.addEventListener('click', () => {
-            const nextTheme = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-            root.setAttribute('data-theme', nextTheme);
-        });
-    }
+const root = document.documentElement;
+const themeBtn = document.getElementById('theme-toggle');
+if(themeBtn) {
+themeBtn.addEventListener('click', () => {
+const nextTheme = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+root.setAttribute('data-theme', nextTheme);
+});
+}
 }
 
 async function synchronizeUserSessionState() {
-    try {
-        const { data: { session }, error } = await window.supabase.auth.getSession();
-        if (error || !session) {
-            showDashToast("Authentication session invalid. Re-routing to verification gateway...", true);
-            setTimeout(() => window.location.replace("index.html"), 2000);
-            return;
-        }
-        currentSessionUser = session.user;
-        
-        const { data: profile, error: profErr } = await window.supabase.from('profiles').select('*').eq('id', currentSessionUser.id).single();
+try {
+const { data: { session }, error } = await window.supabase.auth.getSession();
+if (error || !session) {
+showDashToast("Authentication session invalid. Re-routing to verification gateway...", true);
+setTimeout(() => window.location.replace("login.html"), 2000);
+return;
+}
+currentSessionUser = session.user;
 
-        if (profile) {
-            document.getElementById('user-welcome-name').innerText = profile.full_name || currentSessionUser.email;
-            document.getElementById('metric-hub-name').innerText = profile.destination_hub || profile.delivery_destination || "Global Route Node";
-            document.getElementById('metric-user-phone').innerText = profile.phone || profile.phone_number || "No direct cellular signal Link";
-            
-            document.getElementById('set-full-name').value = profile.full_name || '';
-            document.getElementById('set-phone-number').value = profile.phone || profile.phone_number || '';
-            document.getElementById('set-location').value = profile.location || '';
-            document.getElementById('set-dest-hub').value = profile.destination_hub || profile.delivery_destination || '';
-            if (profile.avatar_url) {
-                document.getElementById('dash-settings-avatar-preview').src = profile.avatar_url;
-            }
-        } else {
-            document.getElementById('user-welcome-name').innerText = currentSessionUser.email;
-        }
+// Query core Profile configuration schema matrix
+const { data: profile, error: profErr } = await window.supabase
+.from('profiles')
+.select('*')
+.eq('id', currentSessionUser.id)
+.single();
 
-        await pullFreightOrdersPayload();
-        initializeRealtimeTelemetrySync();
-    } catch (err) {
-        console.error("Critical tracking session fault:", err);
-        showDashToast("Critical tracking session fault.", true);
-    }
+if (profile) {
+document.getElementById('user-welcome-name').innerText = profile.full_name || currentSessionUser.email;
+document.getElementById('metric-hub-name').innerText = profile.destination_hub || "Global Route Node";
+document.getElementById('metric-user-phone').innerText = profile.phone_number || "No direct cellular signal Link";
+// Bind elements inside profile setup block
+document.getElementById('set-full-name').value = profile.full_name || '';
+document.getElementById('set-phone-number').value = profile.phone_number || '';
+document.getElementById('set-location').value = profile.location || '';
+document.getElementById('set-dest-hub').value = profile.destination_hub || '';
+if (profile.avatar_url) {
+document.getElementById('dash-settings-avatar-preview').src = profile.avatar_url;
+}
+} else {
+document.getElementById('user-welcome-name').innerText = currentSessionUser.email;
+}
+
+await pullFreightOrdersPayload();
+initializeRealtimeTelemetrySync();
+} catch (err) {
+console.error("Critical tracking session fault:", err);
+}
 }
 
 async function pullFreightOrdersPayload() {
-    if(!window.supabase || !currentSessionUser) return;
-    
-    try {
-        // Query safely using user_id linked to auth
-        const { data, error } = await window.supabase.from('orders').select('*').eq('user_id', currentSessionUser.id).order('created_at', { ascending: false });
-        
-        if (!error && data) {
-            globalOrdersCache = data;
-            document.getElementById('metric-orders-count').innerText = data.length;
-            renderOrdersTableGrid(data);
-            
-            if(data.length > 0) {
-                activatePipelineVisualizer(data[0]);
-            }
-        }
-    } catch(err) {
-        console.warn("Failed to fetch order mapping:", err);
-    }
+if(!window.supabase || !currentSessionUser) return;
+// Attempt extraction based on phone mapping configuration matches matching index.html logic
+let searchPhone = document.getElementById('set-phone-number')?.value || '';
+let query = window.supabase.from('orders').select('*');
+if(searchPhone) {
+query = query.or(`phone_number.eq.${searchPhone},customer_phone.eq.${searchPhone}`);
+} else if(currentSessionUser.email) {
+query = query.eq('email', currentSessionUser.email);
+}
+
+const { data, error } = await query.order('created_at', { ascending: false });
+if (!error && data) {
+globalOrdersCache = data;
+document.getElementById('metric-orders-count').innerText = data.length;
+renderOrdersTableGrid(data);
+// Select first primary active log automatically for analytics pipeline component rendering
+if(data.length > 0) {
+activatePipelineVisualizer(data[0]);
+}
+}
 }
 
 function renderOrdersTableGrid(ordersList) {
-    const tbody = document.getElementById('dashboard-orders-table-body');
-    if(!tbody) return;
-    if(ordersList.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--dash-muted); padding: 3rem;">No active freight records mapped to this data signal network.</td></tr>`;
-        return;
-    }
+const tbody = document.getElementById('dashboard-orders-table-body');
+if(!tbody) return;
+if(ordersList.length === 0) {
+tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--dash-muted); padding: 3rem;">No active freight records mapped to this data signal network.</td></tr>`;
+return;
+}
 
-    tbody.innerHTML = '';
-    ordersList.forEach(order => {
-        const tr = document.createElement('tr');
-        let statusColor = "var(--dash-blue-accent)";
-        if (order.status === 'Delivered') statusColor = "var(--dash-green)";
-        if (order.status === 'Pending') statusColor = "var(--dash-muted)";
+tbody.innerHTML = '';
+ordersList.forEach(order => {
+const tr = document.createElement('tr');
+let statusColor = "var(--dash-blue-accent)";
+if (order.status === 'Delivered') statusColor = "var(--dash-green)";
+if (order.status === 'Pending') statusColor = "var(--dash-muted)";
 
-        tr.innerHTML = `
-        <td style="padding: 1rem; border-bottom: 1px solid var(--dash-border); font-family: monospace; font-weight:700;">${order.id.substring(0,8)}...</td>
-        <td style="padding: 1rem; border-bottom: 1px solid var(--dash-border);"><strong>${escapeHTML(order.product_title || 'Commodity Material Pack')}</strong></td>
-        <td style="padding: 1rem; border-bottom: 1px solid var(--dash-border);">Qty: ${order.quantity || 1}</td>
-        <td style="padding: 1rem; border-bottom: 1px solid var(--dash-border);"><small>${escapeHTML(order.location || 'Central Depot Hub')}</small></td>
-        <td style="padding: 1rem; border-bottom: 1px solid var(--dash-border);"><span class="badge" style="background: var(--dash-blue-light); color: ${statusColor}; padding: 4px 8px; border-radius: 12px; font-size:12px;">${escapeHTML(order.status || 'Pending')}</span></td>
-        <td style="padding: 1rem; border-bottom: 1px solid var(--dash-border);"><button class="btn" style="padding:4px 12px; font-size:11px; background: var(--dash-blue-deep); color:white; border:none; border-radius:4px;" onclick="selectOrderToVisualize('${order.id}')">Map Telemetry</button></td>
-        `;
-        tbody.appendChild(tr);
-    });
+tr.innerHTML = `
+<td style="font-family: monospace; font-weight:700;">${order.id.substring(0,8)}...</td>
+<td><strong>${order.product_title || 'Commodity Material Pack'}</strong></td>
+<td>Qty: ${order.quantity || 1}</td>
+<td><small>${order.location || 'Central Depot Hub'}</small></td>
+<td><span class="badge" style="background: var(--dash-blue-light); color: ${statusColor};">${order.status || 'Pending'}</span></td>
+<td><button class="btn" style="padding:4px 12px; font-size:11px; background: var(--dash-blue-deep); color:white;" onclick="selectOrderToVisualize('${order.id}')">Map Telemetry</button></td>
+`;
+tbody.appendChild(tr);
+});
 }
 
 function selectOrderToVisualize(orderId) {
-    const match = globalOrdersCache.find(o => o.id === orderId);
-    if(match) {
-        activatePipelineVisualizer(match);
-        switchPanel('analytics');
-        showDashToast(`Visualizing layout pipeline map tracking for token: ${orderId.substring(0,8)}`);
-    }
+const match = globalOrdersCache.find(o => o.id === orderId);
+if(match) {
+activatePipelineVisualizer(match);
+switchPanel('analytics');
+showDashToast(`Visualizing layout pipeline map tracking for token: ${orderId.substring(0,8)}`);
+}
 }
 
 function activatePipelineVisualizer(order) {
-    document.getElementById('active-pipeline-placeholder').style.display = 'none';
-    document.getElementById('active-pipeline-display').style.display = 'block';
-    document.getElementById('pipeline-order-id').innerText = order.id;
-    document.getElementById('pipeline-product-title').innerText = escapeHTML(order.product_title || 'Material Cargo');
-    
-    ['Pending', 'Processing', 'Delivered'].forEach(st => {
-        document.getElementById(`step-${st}`).classList.remove('completed', 'active');
-    });
-
-    if (order.status === 'Pending') {
-        document.getElementById('step-Pending').classList.add('active');
-        document.getElementById('pipeline-indicator-line').style.width = '0%';
-    } else if (order.status === 'Processing') {
-        document.getElementById('step-Pending').classList.add('completed');
-        document.getElementById('step-Processing').classList.add('active');
-        document.getElementById('pipeline-indicator-line').style.width = '50%';
-    } else if (order.status === 'Delivered') {
-        document.getElementById('step-Pending').classList.add('completed');
-        document.getElementById('step-Processing').classList.add('completed');
-        document.getElementById('step-Delivered').classList.add('completed');
-        document.getElementById('pipeline-indicator-line').style.width = '100%';
-    } else {
-        document.getElementById('step-Pending').classList.add('active');
-        document.getElementById('pipeline-indicator-line').style.width = '0%';
-    }
+document.getElementById('active-pipeline-placeholder').style.display = 'none';
+document.getElementById('active-pipeline-display').style.display = 'block';
+document.getElementById('pipeline-order-id').innerText = order.id;
+document.getElementById('pipeline-product-title').innerText = order.product_title || 'Material Cargo';
+// Reset step class allocations
+['Pending', 'Processing', 'Delivered'].forEach(st => {
+document.getElementById(`step-${st}`).classList.remove('completed', 'active');
+});
+// Map and color appropriate steps along pipeline
+if (order.status === 'Pending') {
+document.getElementById('step-Pending').classList.add('active');
+document.getElementById('pipeline-indicator-line').style.width = '0%';
+} else if (order.status === 'Processing') {
+document.getElementById('step-Pending').classList.add('completed');
+document.getElementById('step-Processing').classList.add('active');
+document.getElementById('pipeline-indicator-line').style.width = '50%';
+} else if (order.status === 'Delivered') {
+document.getElementById('step-Pending').classList.add('completed');
+document.getElementById('step-Processing').classList.add('completed');
+document.getElementById('step-Delivered').classList.add('completed');
+document.getElementById('pipeline-indicator-line').style.width = '100%';
+} else {
+// Fallback tracking mapping defaults
+document.getElementById('step-Pending').classList.add('active');
+document.getElementById('pipeline-indicator-line').style.width = '0%';
+}
 }
 
 function filterOrdersLog() {
-    const sVal = document.getElementById('order-search-input').value.toLowerCase();
-    const statusFilter = document.getElementById('order-status-filter').value;
-    const filtered = globalOrdersCache.filter(o => {
-        const matchesSearch = (o.product_title || '').toLowerCase().includes(sVal) || o.id.toLowerCase().includes(sVal);
-        const matchesStatus = statusFilter === 'All' || o.status === statusFilter;
-        return matchesSearch && matchesStatus;
-    });
-    renderOrdersTableGrid(filtered);
+const sVal = document.getElementById('order-search-input').value.toLowerCase();
+const statusFilter = document.getElementById('order-status-filter').value;
+const filtered = globalOrdersCache.filter(o => {
+const matchesSearch = (o.product_title || '').toLowerCase().includes(sVal) || o.id.toLowerCase().includes(sVal);
+const matchesStatus = statusFilter === 'All' || o.status === statusFilter;
+return matchesSearch && matchesStatus;
+});
+renderOrdersTableGrid(filtered);
 }
 
 function switchPanel(panelId) {
-    document.querySelectorAll('.dash-panel').forEach(p => p.classList.remove('active-panel'));
-    document.querySelectorAll('.dash-nav-btn').forEach(b => b.classList.remove('active'));
-    
-    document.getElementById(`panel-${panelId}`).classList.add('active-panel');
-    event.currentTarget.classList.add('active');
+document.querySelectorAll('.dash-panel').forEach(p => p.classList.remove('active-panel'));
+document.querySelectorAll('.dash-nav-btn').forEach(b => b.classList.remove('active'));
+
+document.getElementById(`panel-${panelId}`).classList.add('active-panel');
+event.currentTarget.classList.add('active');
 }
 
+// --- ACCOUNT SETTINGS SUBMISSION ENGINE ---
 async function saveProfileMatrix(e) {
-    e.preventDefault();
-    if(!window.supabase || !currentSessionUser) return;
+e.preventDefault();
+if(!window.supabase || !currentSessionUser) return;
 
-    const updatedPayload = {
-        full_name: document.getElementById('set-full-name').value.trim(),
-        phone: document.getElementById('set-phone-number').value.trim(),
-        location: document.getElementById('set-location').value.trim(),
-        delivery_destination: document.getElementById('set-dest-hub').value.trim()
-    };
-    
-    try {
-        const { error } = await window.supabase.from('profiles').upsert({ id: currentSessionUser.id, ...updatedPayload });
-        if(!error) {
-            showDashToast("Identity variables successfully written into secure schema cloud ledger.");
-            document.getElementById('user-welcome-name').innerText = updatedPayload.full_name;
-            document.getElementById('metric-hub-name').innerText = updatedPayload.delivery_destination || "Global Route Node";
-            document.getElementById('metric-user-phone').innerText = updatedPayload.phone;
-            await pullFreightOrdersPayload();
-        } else {
-            showDashToast("Database mutation rejected: " + error.message, true);
-        }
-    } catch(err) {
-        showDashToast("Profile Update Error.", true);
-    }
+const updatedPayload = {
+full_name: document.getElementById('set-full-name').value.trim(),
+phone_number: document.getElementById('set-phone-number').value.trim(),
+location: document.getElementById('set-location').value.trim(),
+destination_hub: document.getElementById('set-dest-hub').value.trim(),
+updated_at: new Date()
+};
+const { error } = await window.supabase
+.from('profiles')
+.update(updatedPayload)
+.eq('id', currentSessionUser.id);
+
+if(!error) {
+showDashToast("Identity variables successfully written into secure schema cloud ledger.");
+document.getElementById('user-welcome-name').innerText = updatedPayload.full_name;
+document.getElementById('metric-hub-name').innerText = updatedPayload.destination_hub || "Global Route Node";
+document.getElementById('metric-user-phone').innerText = updatedPayload.phone_number;
+await pullFreightOrdersPayload();
+// Recalculate based on newly registered phone number lines
+} else {
+showDashToast("Database mutation rejected: " + error.message, true);
+}
 }
 
 async function rotateSecurityToken() {
-    const pass = document.getElementById('set-new-password').value;
-    if(!pass || pass.length < 6) {
-        showDashToast("Error: Passphrase must be at least 6 characters.", true);
-        return;
-    }
-    const { error } = await window.supabase.auth.updateUser({ password: pass });
-    if(!error) {
-        showDashToast("Cryptographic access token successfully updated.");
-        document.getElementById('set-new-password').value = '';
-    } else {
-        showDashToast("Security adjustment failed: " + error.message, true);
-    }
+const pass = document.getElementById('set-new-password').value;
+if(!pass || pass.length < 6) {
+showDashToast("Error: Passphrase must be at least 6 characters.", true);
+return;
+}
+const { error } = await window.supabase.auth.updateUser({ password: pass });
+if(!error) {
+showDashToast("Cryptographic access token successfully updated.");
+document.getElementById('set-new-password').value = '';
+} else {
+showDashToast("Security adjustment failed: " + error.message, true);
+}
 }
 
+// --- SOCIAL ENGAGEMENT ARCHITECTURE ---
 function renderSocialCommentStream() {
-    const container = document.getElementById('dashboard-comments-container');
-    if(!container) return;
-    container.innerHTML = '';
-    
-    globalCommentsMock.forEach(comment => {
-        const node = document.createElement('div');
-        node.className = 'comment-node';
-        node.innerHTML = `
-        <div style="font-size:13px; font-weight:700; color:var(--dash-blue-deep); margin-bottom:4px;">${escapeHTML(comment.author)}</div>
-        <div style="font-size:13px; opacity:0.9; line-height:1.4;">${escapeHTML(comment.body)}</div>
-        <div class="reaction-row">
-        <button class="react-pill" onclick="triggerNodeReaction(${comment.id}, '👍')">👍 <span>${comment.reactions['👍'] || 0}</span></button>
-        <button class="react-pill" onclick="triggerNodeReaction(${comment.id}, '🔥')">🔥 <span>${comment.reactions['🔥'] || 0}</span></button>
-        <button class="react-pill" onclick="triggerNodeReaction(${comment.id}, '🚀')">🚀 <span>${comment.reactions['🚀'] || 0}</span></button>
-        </div>
-        `;
-        container.appendChild(node);
-    });
+const container = document.getElementById('dashboard-comments-container');
+if(!container) return;
+container.innerHTML = '';
+
+globalCommentsMock.forEach(comment => {
+const node = document.createElement('div');
+node.className = 'comment-node';
+node.innerHTML = `
+<div style="font-size:13px; font-weight:700; color:var(--dash-blue-deep); margin-bottom:4px;">${comment.author}</div>
+<div style="font-size:13px; opacity:0.9; line-height:1.4;">${comment.body}</div>
+<div class="reaction-row">
+<button class="react-pill" onclick="triggerNodeReaction(${comment.id}, '👍')">👍 <span>${comment.reactions['👍'] || 0}</span></button>
+<button class="react-pill" onclick="triggerNodeReaction(${comment.id}, '❤️')">❤️ <span>${comment.reactions['❤️'] || 0}</span></button>
+<button class="react-pill" onclick="triggerNodeReaction(${comment.id}, '🔥')">🔥 <span>${comment.reactions['🔥'] || 0}</span></button>
+</div>
+`;
+container.appendChild(node);
+});
 }
 
 function submitDashComment(e) {
-    e.preventDefault();
-    const authorInput = document.getElementById('dash-comment-author');
-    const bodyInput = document.getElementById('dash-comment-body');
-    
-    const newComment = {
-        id: globalCommentsMock.length + 1,
-        author: authorInput.value.trim(),
-        body: bodyInput.value.trim(),
-        reactions: { "👍": 1 }
-    };
-    globalCommentsMock.unshift(newComment);
-    renderSocialCommentStream();
-    bodyInput.value = '';
-    showDashToast("Social package injected successfully.");
+e.preventDefault();
+const authorInput = document.getElementById('dash-comment-author');
+const bodyInput = document.getElementById('dash-comment-body');
+
+const newComment = {
+id: globalCommentsMock.length + 1,
+author: authorInput.value.trim(),
+body: bodyInput.value.trim(),
+reactions: { "🔥": 1 }
+};
+globalCommentsMock.unshift(newComment);
+renderSocialCommentStream();
+bodyInput.value = '';
+showDashToast("Social package injected successfully.");
 }
 
 function triggerNodeReaction(id, emoji) {
-    const item = globalCommentsMock.find(c => c.id === id);
-    if(item) {
-        if(!item.reactions[emoji]) item.reactions[emoji] = 0;
-        item.reactions[emoji]++;
-        renderSocialCommentStream();
-        createExplosionBurstParticles();
-    }
+const item = globalCommentsMock.find(c => c.id === id);
+if(item) {
+if(!item.reactions[emoji]) item.reactions[emoji] = 0;
+item.reactions[emoji]++;
+renderSocialCommentStream();
+createExplosionBurstParticles();
+}
 }
 
+// --- IMMERSIVE ECOSYSTEM DIGITAL GARDEN CANVAS ANIMATION ENGINE ---
 function setupInteractiveGardenCanvas() {
-    canvas = document.getElementById("garden-canvas");
-    if(!canvas) return;
-    ctx = canvas.getContext("2d");
-    
-    resizeGardenViewport();
-    window.addEventListener("resize", resizeGardenViewport);
-    randomizeGardenGrowth();
-    requestAnimationFrame(tickGardenEcosystemFrame);
+canvas = document.getElementById("garden-canvas");
+if(!canvas) return;
+ctx = canvas.getContext("2d");
+
+resizeGardenViewport();
+window.addEventListener("resize", resizeGardenViewport);
+// Seed procedural garden items arrays
+randomizeGardenGrowth();
+
+// Run core requestAnimationFrame matrix loop
+requestAnimationFrame(tickGardenEcosystemFrame);
 }
 
 function resizeGardenViewport() {
-    if(!canvas) return;
-    const d = canvas.parentElement.getBoundingClientRect();
-    canvas.width = d.width;
-    canvas.height = 220;
+if(!canvas) return;
+const d = canvas.getBoundingClientRect();
+canvas.width = d.width;
+canvas.height = 220;
 }
 
 function randomizeGardenGrowth() {
-    flowers = []; grassBlades = []; butterflies = []; ambientParticles = [];
-    const bladeCount = Math.floor(window.innerWidth / 8);
-    for(let i = 0; i < bladeCount; i++) {
-        grassBlades.push({ x: (canvas.width / bladeCount) * i + Math.random() * 4, height: 45 + Math.random() * 35, bend: Math.random() * 10 - 5, speed: 0.02 + Math.random() * 0.02, phase: Math.random() * Math.PI });
-    }
-    for(let i = 0; i < 7; i++) {
-        flowers.push({ x: 60 + ((canvas.width - 120) / 6) * i + (Math.random() * 20 - 10), y: canvas.height - 15, stemHeight: 60 + Math.random() * 50, radius: 8 + Math.random() * 6, color: i % 2 === 0 ? '#2563eb' : '#38bdf8', petalCount: 5 + Math.floor(Math.random() * 4), swayOffset: Math.random() * Math.PI });
-    }
-    for(let i = 0; i < 4; i++) {
-        butterflies.push({ x: Math.random() * canvas.width, y: 40 + Math.random() * 100, vx: 0.5 + Math.random() * 1, vy: Math.random() * 0.6 - 0.3, wingPhase: Math.random() * Math.PI, color: '#3b82f6' });
-    }
-    for(let i = 0; i < 25; i++) {
-        ambientParticles.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, radius: 1 + Math.random() * 2, alpha: 0.2 + Math.random() * 0.6, speedY: 0.1 + Math.random() * 0.3, phase: Math.random() * Math.PI });
-    }
+flowers = [];
+grassBlades = [];
+butterflies = [];
+ambientParticles = [];
+// Seed grass blades with harmonic offset frequencies
+const bladeCount = Math.floor(window.innerWidth / 8);
+for(let i = 0; i < bladeCount; i++) {
+grassBlades.push({
+x: (canvas.width / bladeCount) * i + Math.random() * 4,
+height: 45 + Math.random() * 35,
+bend: Math.random() * 10 - 5,
+speed: 0.02 + Math.random() * 0.02,
+phase: Math.random() * Math.PI
+});
+}
+
+// Seed interactive elegant flowers along timeline plane
+for(let i = 0; i < 7; i++) {
+flowers.push({
+x: 60 + ((canvas.width - 120) / 6) * i + (Math.random() * 20 - 10),
+y: canvas.height - 15,
+stemHeight: 60 + Math.random() * 50,
+radius: 8 + Math.random() * 6,
+color: i % 2 === 0 ? '#2563eb' : '#38bdf8',
+petalCount: 5 + Math.floor(Math.random() * 4),
+swayOffset: Math.random() * Math.PI
+});
+}
+
+// Seed soft ambient butterflies
+for(let i = 0; i < 4; i++) {
+butterflies.push({
+x: Math.random() * canvas.width,
+y: 40 + Math.random() * 100,
+vx: 0.5 + Math.random() * 1,
+vy: Math.random() * 0.6 - 0.3,
+wingPhase: Math.random() * Math.PI,
+color: '#3b82f6'
+});
+}
+
+// Floating luminous pollen particles
+for(let i = 0; i < 25; i++) {
+ambientParticles.push({
+x: Math.random() * canvas.width,
+y: Math.random() * canvas.height,
+radius: 1 + Math.random() * 2,
+alpha: 0.2 + Math.random() * 0.6,
+speedY: 0.1 + Math.random() * 0.3,
+phase: Math.random() * Math.PI
+});
+}
 }
 
 function toggleGardenMotion() {
-    animateGarden = !animateGarden;
-    showDashToast(animateGarden ? "Vector fields reactive." : "Biosphere timeline frame paused.");
+animateGarden = !animateGarden;
+showDashToast(animateGarden ? "Vector fields reactive." : "Biosphere timeline frame paused.");
 }
 
 function triggerGardenDancePulse() {
-    gardenPulseFactor = 2.5;
-    createExplosionBurstParticles();
-    showDashToast("Biosphere visual response rhythm pulse forced.");
+gardenPulseFactor = 2.5;
+createExplosionBurstParticles();
+showDashToast("Biosphere visual response rhythm pulse forced.");
 }
 
 function createExplosionBurstParticles() {
-    for(let i = 0; i < 15; i++) {
-        ambientParticles.push({ x: Math.random() * canvas.width, y: canvas.height - 80, radius: 2 + Math.random() * 3, alpha: 1.0, speedY: -1.5 - Math.random() * 2, phase: Math.random() * Math.PI });
-    }
+for(let i = 0; i < 15; i++) {
+ambientParticles.push({
+x: Math.random() * canvas.width,
+y: canvas.height - 80,
+radius: 2 + Math.random() * 3,
+alpha: 1.0,
+speedY: -1.5 - Math.random() * 2,
+phase: Math.random() * Math.PI
+});
+}
 }
 
 function tickGardenEcosystemFrame(timestamp) {
-    if(!canvas || !ctx) return;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    let timeFactor = timestamp * 0.0015;
-    let currentWindBend = animateGarden ? Math.sin(timeFactor) * 12 : 2;
-    
-    if (gardenPulseFactor > 1.0) gardenPulseFactor -= 0.04;
-    else gardenPulseFactor = 1.0;
-    
-    cloudOffset += 0.08;
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.07)';
-    ctx.beginPath();
-    ctx.arc(120 + (cloudOffset % canvas.width), 40, 30, 0, Math.PI * 2);
-    ctx.arc(150 + (cloudOffset % canvas.width), 35, 40, 0, Math.PI * 2);
-    ctx.arc(180 + (cloudOffset % canvas.width), 40, 30, 0, Math.PI * 2);
-    ctx.fill();
+if(!canvas || !ctx) return;
 
-    grassBlades.forEach(blade => {
-        if (animateGarden) blade.phase += blade.speed;
-        let dynamicBend = blade.bend + currentWindBend + (Math.sin(blade.phase) * 4);
-        ctx.strokeStyle = '#1e3a8a';
-        ctx.globalAlpha = 0.08;
-        ctx.lineWidth = 2.5;
-        ctx.beginPath();
-        ctx.moveTo(blade.x, canvas.height);
-        ctx.quadraticCurveTo(blade.x, canvas.height - (blade.height * 0.5), blade.x + (dynamicBend * 0.6), canvas.height - blade.height);
-        ctx.stroke();
-    });
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+// Apply wind vector calculation states based on sine mathematical waves
+let timeFactor = timestamp * 0.0015;
+let currentWindBend = Math.sin(timeFactor) * 12;
 
-    flowers.forEach(flower => {
-        let sway = Math.sin(timeFactor + flower.swayOffset) * 6 * gardenPulseFactor;
-        let topX = flower.x + sway + (currentWindBend * 0.4);
-        let topY = flower.y - flower.stemHeight;
-        ctx.strokeStyle = '#3b82f6';
-        ctx.globalAlpha = 0.25;
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(flower.x, flower.y);
-        ctx.quadraticCurveTo(flower.x + (sway * 0.3), flower.y - (flower.stemHeight * 0.5), topX, topY);
-        ctx.stroke();
-        ctx.globalAlpha = 0.85;
-        ctx.fillStyle = flower.color;
-        for(let i = 0; i < flower.petalCount; i++) {
-            let angle = (Math.PI * 2 / flower.petalCount) * i + (timeFactor * 0.2);
-            let petalRadius = flower.radius * gardenPulseFactor;
-            let px = topX + Math.cos(angle) * (petalRadius * 0.9);
-            let py = topY + Math.sin(angle) * (petalRadius * 0.9);
-            ctx.beginPath();
-            ctx.arc(px, py, petalRadius * 0.6, 0, Math.PI * 2);
-            ctx.fill();
-        }
-        ctx.fillStyle = '#ffffff';
-        ctx.beginPath();
-        ctx.arc(topX, topY, flower.radius * 0.4, 0, Math.PI * 2);
-        ctx.fill();
-    });
-
-    butterflies.forEach(b => {
-        if (animateGarden) {
-            b.x += b.vx;
-            b.y += b.vy + Math.sin(timeFactor * 2) * 0.4;
-            b.wingPhase += 0.25;
-            if(b.x > canvas.width + 20) b.x = -20;
-            if(b.y < 10 || b.y > canvas.height - 40) b.vy = -b.vy;
-        }
-        let wingWidth = 7 * Math.abs(Math.sin(b.wingPhase));
-        ctx.fillStyle = 'rgba(37, 99, 235, 0.7)';
-        ctx.globalAlpha = 0.8;
-        ctx.beginPath();
-        ctx.ellipse(b.x - wingWidth, b.y - 3, wingWidth, 6, Math.PI/4, 0, Math.PI*2);
-        ctx.ellipse(b.x + wingWidth, b.y - 3, wingWidth, 6, -Math.PI/4, 0, Math.PI*2);
-        ctx.fill();
-    });
-
-    ctx.globalAlpha = 1.0;
-    ambientParticles.forEach((p, idx) => {
-        if (animateGarden) {
-            p.y += p.speedY;
-            p.x += Math.sin(timeFactor + p.phase) * 0.2;
-            if (p.y > canvas.height) { p.y = -5; p.x = Math.random() * canvas.width; p.alpha = 0.2 + Math.random() * 0.6; }
-        }
-        ctx.fillStyle = `rgba(37, 99, 235, ${p.alpha})`;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fill();
-    });
-    
-    if (document.getElementById("panel-analytics").classList.contains("active-panel")) {
-        requestAnimationFrame(tickGardenEcosystemFrame);
-    } else {
-        setTimeout(() => requestAnimationFrame(tickGardenEcosystemFrame), 100);
-    }
+if (!animateGarden) {
+currentWindBend = 2;
+// Fixed steady state if tracking is paused
 }
 
+// Decay audio pulse factors back gracefully down towards unit baseline values
+if (gardenPulseFactor > 1.0) {
+gardenPulseFactor -= 0.04;
+} else {
+gardenPulseFactor = 1.0;
+}
+
+// Render background skies context indicators
+cloudOffset += 0.08;
+ctx.fillStyle = 'rgba(255, 255, 255, 0.07)';
+ctx.beginPath();
+ctx.arc(120 + (cloudOffset % canvas.width), 40, 30, 0, Math.PI * 2);
+ctx.arc(150 + (cloudOffset % canvas.width), 35, 40, 0, Math.PI * 2);
+ctx.arc(180 + (cloudOffset % canvas.width), 40, 30, 0, Math.PI * 2);
+ctx.fill();
+// 1. Render sway grass array strokes
+grassBlades.forEach(blade => {
+if (animateGarden) {
+blade.phase += blade.speed;
+}
+let dynamicBend = blade.bend + currentWindBend + (Math.sin(blade.phase) * 4);
+
+ctx.strokeStyle = '#1e3a8a';
+ctx.globalAlpha = 0.08;
+ctx.lineWidth = 2.5;
+ctx.beginPath();
+ctx.moveTo(blade.x, canvas.height);
+ctx.quadraticCurveTo(blade.x, canvas.height - (blade.height * 0.5), blade.x + (dynamicBend * 0.6), canvas.height - blade.height);
+ctx.stroke();
+});
+// 2. Render flowers stems and elegant geometric path petals
+flowers.forEach(flower => {
+let sway = Math.sin(timeFactor + flower.swayOffset) * 6 * gardenPulseFactor;
+let topX = flower.x + sway + (currentWindBend * 0.4);
+let topY = flower.y - flower.stemHeight;
+
+// Draw deep modern blue connection stems
+ctx.strokeStyle = '#3b82f6';
+ctx.globalAlpha = 0.25;
+ctx.lineWidth = 2;
+ctx.beginPath();
+ctx.moveTo(flower.x, flower.y);
+ctx.quadraticCurveTo(flower.x + (sway * 0.3), flower.y - (flower.stemHeight * 0.5), topX, topY);
+ctx.stroke();
+
+// Draw geometric luxury petals nodes
+ctx.globalAlpha = 0.85;
+ctx.fillStyle = flower.color;
+for(let i = 0; i < flower.petalCount; i++) {
+let angle = (Math.PI * 2 / flower.petalCount) * i + (timeFactor * 0.2);
+let petalRadius = flower.radius * gardenPulseFactor;
+let px = topX + Math.cos(angle) * (petalRadius * 0.9);
+let py = topY + Math.sin(angle) * (petalRadius * 0.9);
+ctx.beginPath();
+ctx.arc(px, py, petalRadius * 0.6, 0, Math.PI * 2);
+ctx.fill();
+}
+
+// Core flower center disk center point highlight
+ctx.fillStyle = '#ffffff';
+ctx.beginPath();
+ctx.arc(topX, topY, flower.radius * 0.4, 0, Math.PI * 2);
+ctx.fill();
+});
+// 3. Update & render ambient butterfly vector systems
+butterflies.forEach(b => {
+if (animateGarden) {
+b.x += b.vx;
+b.y += b.vy + Math.sin(timeFactor * 2) * 0.4;
+b.wingPhase += 0.25;
+
+if(b.x > canvas.width + 20) b.x = -20;
+if(b.y < 10 || b.y > canvas.height - 40) b.vy = -b.vy;
+}
+
+let wingWidth = 7 * Math.abs(Math.sin(b.wingPhase));
+ctx.fillStyle = 'rgba(37, 99, 235, 0.7)';
+ctx.globalAlpha = 0.8;
+
+// Draw elegant twin wing path strokes
+ctx.beginPath();
+ctx.ellipse(b.x - wingWidth, b.y - 3, wingWidth, 6, Math.PI/4, 0, Math.PI*2);
+ctx.ellipse(b.x + wingWidth, b.y - 3, wingWidth, 6, -Math.PI/4, 0, Math.PI*2);
+ctx.fill();
+});
+// 4. Update & draw particulate micro systems layer
+ctx.globalAlpha = 1.0;
+ambientParticles.forEach((p, idx) => {
+if (animateGarden) {
+p.y += p.speedY;
+p.x += Math.sin(timeFactor + p.phase) * 0.2;
+
+// Recycle fallen or expired elements gracefully back upwards
+if (p.y > canvas.height) {
+p.y = -5;
+p.x = Math.random() * canvas.width;
+p.alpha = 0.2 + Math.random() * 0.6;
+}
+}
+
+ctx.fillStyle = `rgba(37, 99, 235, ${p.alpha})`;
+ctx.beginPath();
+ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+ctx.fill();
+});
+// Continuous loop execution synchronization
+requestAnimationFrame(tickGardenEcosystemFrame);
+}
+
+// --- NON-INTRUSIVE WEB AUDIO API AMBIENT SOUND GENERATION ENGINE ---
 function toggleAmbientSynthesizer() {
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const btn = document.getElementById('synth-toggle-btn');
-    if (soundIsPlaying) {
-        if (ambientGainNode) ambientGainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.3);
-        clearInterval(oscillatorIntervalId);
-        setTimeout(() => { if(ambientOscillator) ambientOscillator.stop(); soundIsPlaying = false; btn.innerText = "Play Frequency"; btn.style.background = "var(--dash-blue-deep)"; }, 350);
-    } else {
-        ambientOscillator = audioCtx.createOscillator();
-        ambientGainNode = audioCtx.createGain();
-        ambientOscillator.type = 'sine';
-        ambientOscillator.frequency.setValueAtTime(220, audioCtx.currentTime);
-        ambientGainNode.gain.setValueAtTime(0.0001, audioCtx.currentTime);
-        ambientGainNode.gain.linearRampToValueAtTime(0.08, audioCtx.currentTime + 1.0);
-        ambientOscillator.connect(ambientGainNode);
-        ambientGainNode.connect(audioCtx.destination);
-        ambientOscillator.start();
-        soundIsPlaying = true;
-        btn.innerText = "Mute Synth";
-        btn.style.background = "var(--dash-red)";
-        oscillatorIntervalId = setInterval(() => {
-            if(!soundIsPlaying || !audioCtx) return;
-            const chimeOsc = audioCtx.createOscillator();
-            const chimeGain = audioCtx.createGain();
-            chimeOsc.type = 'triangle';
-            const pentatonicBase = [329.63, 440.00, 493.88, 554.37, 659.25];
-            const targetFreq = pentatonicBase[Math.floor(Math.random() * pentatonicBase.length)];
-            chimeOsc.frequency.setValueAtTime(targetFreq, audioCtx.currentTime);
-            chimeGain.gain.setValueAtTime(0.04, audioCtx.currentTime);
-            chimeGain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 2.5);
-            chimeOsc.connect(chimeGain);
-            chimeGain.connect(audioCtx.destination);
-            chimeOsc.start();
-            chimeOsc.stop(audioCtx.currentTime + 2.6);
-            gardenPulseFactor = 1.3;
-        }, 3000);
-    }
+if (!audioCtx) {
+// Instantiate browser audio processing context ecosystem safely upon explicit interaction
+audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 }
 
+const btn = document.getElementById('synth-toggle-btn');
+
+if (soundIsPlaying) {
+// Gracefully sever parameters and cease sound wave oscillation loops
+if (ambientGainNode) {
+ambientGainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.3);
+}
+clearInterval(oscillatorIntervalId);
+setTimeout(() => {
+if(ambientOscillator) ambientOscillator.stop();
+soundIsPlaying = false;
+btn.innerText = "Play Frequency";
+btn.style.background = "var(--dash-blue-deep)";
+}, 350);
+} else {
+// Initialize premium continuous background modular synth layer node pipeline
+ambientOscillator = audioCtx.createOscillator();
+ambientGainNode = audioCtx.createGain();
+// Generate smooth sine harmonic frequencies matching modern blue environments
+ambientOscillator.type = 'sine';
+ambientOscillator.frequency.setValueAtTime(220, audioCtx.currentTime);
+// A3 baseline key signature node
+
+ambientGainNode.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+ambientGainNode.gain.linearRampToValueAtTime(0.08, audioCtx.currentTime + 1.0);
+// Safe controlled low velocity decibels
+
+ambientOscillator.connect(ambientGainNode);
+ambientGainNode.connect(audioCtx.destination);
+
+ambientOscillator.start();
+soundIsPlaying = true;
+btn.innerText = "Mute Synth";
+btn.style.background = "var(--dash-red)";
+
+// Generate micro pentatonic wind-chime frequencies procedurally down execution queues
+oscillatorIntervalId = setInterval(() => {
+if(!soundIsPlaying || !audioCtx) return;
+
+const chimeOsc = audioCtx.createOscillator();
+const chimeGain = audioCtx.createGain();
+
+chimeOsc.type = 'triangle';
+// Harmonic frequencies mapped explicitly within scale structures (E4, A4, B4, C#5, E5)
+const pentatonicBase = [329.63, 440.00, 493.88, 554.37, 659.25];
+const targetFreq = pentatonicBase[Math.floor(Math.random() * pentatonicBase.length)];
+chimeOsc.frequency.setValueAtTime(targetFreq, audioCtx.currentTime);
+chimeGain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+chimeGain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 2.5);
+
+chimeOsc.connect(chimeGain);
+chimeGain.connect(audioCtx.destination);
+
+chimeOsc.start();
+chimeOsc.stop(audioCtx.currentTime + 2.6);
+// Induce small micro physical reaction pulse down interactive digital landscape array lines
+gardenPulseFactor = 1.3;
+}, 3000);
+}
+}
+
+// --- REAL-TIME PORTAL DATABASE UPDATE ROUTING PIPELINES ---
 function initializeRealtimeTelemetrySync() {
-    if(!window.supabase) return;
-    window.supabase.channel('dashboard-live-orders-trigger').on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, async (payload) => {
-        showDashToast("Real-time telemetry manifest change registered. Reloading matrix lines...");
-        await pullFreightOrdersPayload();
-    }).subscribe();
+if(!window.supabase) return;
+// Map and attach real-time Postgres event pipeline listener hooks matching index.html core architectures
+window.supabase.channel('dashboard-live-orders-trigger')
+.on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, async (payload) => {
+showDashToast("Real-time telemetry manifest change registered. Reloading matrix lines...");
+await pullFreightOrdersPayload();
+}).subscribe();
 }
 
+// --- GENERAL SYSTEM MICRO INTERACTION ALERTS UI UTILITIES ---
 function showDashToast(message, isAlert = false) {
-    const toast = document.getElementById('dash-toast-system');
-    if(!toast) return;
-    toast.innerText = message;
-    toast.style.borderLeftColor = isAlert ? 'var(--dash-red)' : 'var(--dash-blue-accent)';
-    toast.style.transform = 'translateY(0)';
-    setTimeout(() => toast.style.transform = 'translateY(150%)', 4000);
+const toast = document.getElementById('dash-toast-system');
+if(!toast) return;
+toast.innerText = message;
+toast.style.borderLeftColor = isAlert ? 'var(--dash-red)' : 'var(--dash-blue-accent)';
+toast.classList.add('show');
+setTimeout(() => toast.classList.remove('show'), 4000);
 }
 
 async function logoutMainframe() {
-    if(window.supabase) {
-        await window.supabase.auth.signOut();
-    }
-    window.location.replace("index.html");
+if(window.supabase) {
+await window.supabase.auth.signOut();
 }
-
-function escapeHTML(str) {
-    if(!str) return "";
-    const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
+window.location.replace("index.html");
 }
 </script>
 </body>
